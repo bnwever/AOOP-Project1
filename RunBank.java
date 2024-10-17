@@ -12,23 +12,21 @@ public class RunBank {
      * 
      * Bank Managers gain access to view every account in the bank.
      */
-    public Boolean isBankManager;
+    public static Boolean isBankManager = false;
+
+    private static final Scanner scanner = new Scanner(System.in);
 
     /**
      * 
      */
     public static void displayMenu(){
-        System.out.println("----------------------------------------");
-        System.out.println("----------------------------------------");
     }
 
     /**
      * 
      */
-    public static void logIn(){
-        System.out.println("----------------------------------------");
-
-        System.out.println("----------------------------------------");
+    public static boolean logIn(){
+        return true;
     }
 
     /**
@@ -36,10 +34,9 @@ public class RunBank {
      * @return The string entered by the user.
      */
     public static String promptUser(){
-        try (Scanner scanner = new Scanner(System.in)){
-            System.out.print("$ ");
-            return scanner.nextLine();
-        }
+        System.out.println("----------------------------------------");
+        System.out.print("$ ");
+        return scanner.nextLine();
     }
 
     /**
@@ -47,6 +44,12 @@ public class RunBank {
      * @param args command line (unused)
     */  
     public static void main(String[] args){
-
- }
+        while (1 < 2) {
+            String temp = promptUser();
+            if (temp.equals("exit")) {
+                break;
+            }
+        }
+        scanner.close();
+    }
 }
