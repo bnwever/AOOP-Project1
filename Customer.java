@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Customer class represents a bank customer who can own multiple accounts.
