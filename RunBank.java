@@ -3,7 +3,7 @@ import java.util.Scanner;
 /**
  * The RunBank class handles the interaction between the user and the program.
  * It also displays the starting and login menu.
- * @author Jesus Ordaz and Blaine Wever
+ * @author Blaine 
  */
 public class RunBank {
     /**
@@ -35,7 +35,7 @@ public class RunBank {
      */
     public static String promptUser(){
         System.out.println("----------------------------------------");
-        System.out.print("$ ");
+        System.out.print("> ");
         return scanner.nextLine();
     }
 
@@ -44,7 +44,7 @@ public class RunBank {
      * @param args command line (unused)
     */  
     public static void main(String[] args){
-        while (1 < 2) {
+        while (true) {
             String temp = promptUser();
             if (temp.equals("exit")) {
                 break;
