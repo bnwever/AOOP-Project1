@@ -1,13 +1,15 @@
 import java.util.Scanner;
+
 /**
  * Concrete class representation of a savings account in a bank.
  * 
  * Provides implementation for the abstract methods such as collecting amount from user,
  * deposit function, withdraw function, and money transferring.
  * 
- * @author Blaine
+ * @author Blaine Wever
  */
 public class Credit extends Account {
+    private double creditLimit;
     /**
      * Collects a positive double from user that does not exceed the maximumBalance.
      * 
@@ -68,18 +70,36 @@ public class Credit extends Account {
     /** Removes amount inputed to balance. */
     @Override
     public void withdraw() {
-        this.setBalance(this.getBalance() - collectAmount());
+        this.setBalance(this.getBalance() - amountWithinBalance());
         System.out.printf("Process Success: Current Balance = %.2f\n", this.getBalance());
     }
 
     /** Transfers money from account to recipient's account. */
     @Override
     public void transferMoney(Account recipient) {
-        double amount = collectAmount();
+        double amount = amountWithinBalance();
 
         this.setBalance(this.getBalance() - amount);
         recipient.setBalance(recipient.getBalance() + amount);
 
         System.out.printf("Process Success: Current Balance = %.2f\n", this.getBalance());
+    }
+
+    /** Collects a positive double within the account's balance. */
+    private double amountWithinBalance () {
+        double amount;
+
+        // Loop to ensure that amount is not greater than balance
+        while (true) {
+            amount = collectAmount();
+
+            if (this.getBalance() - amount >= this.creditLimit) {
+                break;
+            } else {
+                System.out.println("Invalid input. Amount exceeds credit limit.");
+            }
+        }
+
+        return amount;
     }
 }

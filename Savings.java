@@ -5,7 +5,7 @@ import java.util.Scanner;
  * Provides implementation for the abstract methods such as collecting amount from user,
  * deposit function, withdraw function, and money transferring.
  * 
- * @author Blaine
+ * @author Blaine Wever
  */
 public class Savings extends Account {
     private int withdrawLimit = 6;
@@ -56,7 +56,10 @@ public class Savings extends Account {
         System.out.printf("Process Success: Currente Balance = %.2f\n");
     }
 
-    /** Removes amount inputed to balance. */
+    /** 
+     * Removes amount inputed to balance.
+     * The amount of withdrawals are limited per cycle.
+     */
     @Override
     public void withdraw() {
         if (this.withdrawLimit <= 0){

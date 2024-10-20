@@ -19,13 +19,48 @@ public class RunBank {
     /**
      * 
      */
-    public static void displayMenu(){
+    public static void startMenuCustomer() {
+        while (true) {
+            System.out.println("--------------------------------------------------------------" +
+                               "Please insert the number for the function you'd like to use." +
+                               "--------------------------------------------------------------" +
+                               "1 - Check Balance" +
+                               "2 - Deposit" +
+                               "3 - Withdraw" +
+                               "4 - Transfer" +
+                               "--------------------------------------------------------------");
+
+            switch (promptUser()) {
+                case "1":
+                System.out.println("");
+                    break;
+
+                case "2":
+                    break;
+
+                case "3":
+                    break;
+
+                case "4":
+                    break;
+
+                default:
+                    System.out.println("Invalid Input.");
+            }
+        }
     }
 
     /**
      * 
      */
-    public static boolean logIn(){
+    public static void startMenuBankManager() {
+
+    }
+
+    /**
+     * 
+     */
+    public static boolean logIn() {
         return true;
     }
 
@@ -33,17 +68,24 @@ public class RunBank {
      * Prompts the user for an input and returns the entered string.
      * @return The string entered by the user.
      */
-    public static String promptUser(){
+    public static String promptUser() {
         System.out.println("----------------------------------------");
         System.out.print("> ");
         return scanner.nextLine();
+    }
+
+    public static Boolean isExit(String inputIn) {
+        if (inputIn.equals("exit")){
+            return true;
+        }
+        return false;
     }
 
     /**
      * The main method for the Bank Program.
      * @param args command line (unused)
     */  
-    public static void main(String[] args){
+    public static void main(String[] args) {
         while (true) {
             String temp = promptUser();
             if (temp.equals("exit")) {

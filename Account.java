@@ -5,7 +5,7 @@
  * checking, credit, and savings classes to implement.
  * Provides getter and setter methods for accountID and balance.
  * 
- * @author Blaine
+ * @author Blaine Wever
  */
 abstract class Account {
     // Attributes
@@ -16,7 +16,10 @@ abstract class Account {
     private double balance;
 
     // Methods
-    /** Prompts user for amount as input */
+    /** Prompts user for amount as input 
+     * 
+     * @return The input as a double
+     */
     public abstract double collectAmount();
 
     /** Deposits an amount of money into the account. */
@@ -28,17 +31,26 @@ abstract class Account {
     /** Transfers and amount of money from the account to the recipient account. */
     public abstract void transferMoney(Account recipient);
      
-    /** Gets and returns the account ID */
+    /** Gets and returns the account ID 
+     * 
+     * @return accountID
+     */
     public String getAccountID() {
         return this.accountID;
     }
 
-    /** Gets and returns the current balance of the account. */
+    /** Gets and returns the current balance of the account. 
+     * 
+     * @return balance
+     */
     public double getBalance() {
         return this.balance;
     }
 
-    /** Sets balance to newBalance */
+    /** Sets balance to a double. 
+     * 
+     * @param newBalance
+     */
     public void setBalance(double newBalance) {
         this.balance = newBalance;
     }
