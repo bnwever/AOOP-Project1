@@ -10,6 +10,11 @@ import java.util.Scanner;
  */
 public class Credit extends Account {
     private double creditLimit;
+
+    public Credit(int accountIDIn, double balanceIn){
+        super(accountIDIn, balanceIn);
+    }
+
     /**
      * Collects a positive double from user that does not exceed the maximumBalance.
      * 

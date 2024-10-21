@@ -11,6 +11,10 @@ public class Checking extends Account {
     /** Fee for overdrafting balance */
     private double overDraftFee = 50.0;
 
+    public Checking(int accountIDIn, double balanceIn){
+        super(accountIDIn, balanceIn);
+    }
+
     /**
      * Collects a positivedouble from user.
      * 

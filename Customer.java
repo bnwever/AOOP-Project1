@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The Customer class represents a bank customer who can own multiple accounts.
@@ -8,15 +7,18 @@ import java.util.List;
  * @author Jesus Ordaz
  */
 public class Customer {
-    private String customerID;
+    private int customerID;
     private ArrayList<Account> accounts;
 
+    public Customer () {
+        this.accounts = new ArrayList<>();
+    }
     /**
      * Constructs a Customer with a specified customer ID.
      * 
      * @param customerIDIn the unique ID of the customer
      */
-    public Customer(String customerIDIn) {
+    public Customer(int customerIDIn) {
         this.customerID = customerIDIn;
         this.accounts = new ArrayList<>();
     }
@@ -24,7 +26,7 @@ public class Customer {
     /**
      * Adds an existing account to the customer's list of accounts.
      * 
-     * @param account the account to be added
+     * @param account the account to be added.
      */
     public void addAccount(Account account) {
         this.accounts.add(account);
@@ -33,16 +35,16 @@ public class Customer {
     /**
      * Removes an account based on its account number.
      * 
-     * @param accountNumber the unique identifier of the account to be removed
+     * @param accountNumber the unique identifier of the account to be removed.
      */
-    public void removeAccount(String accountNumber) {
-        accounts.removeIf(account -> account.getAccountID().equals(accountNumber));
+    public void removeAccount(int accountNumber) {
+        accounts.removeIf(account -> account.getAccountID() == accountNumber);
     }
 
     /**
      * Returns the list of accounts associated with the customer.
      * 
-     * @return the list of accounts
+     * @return the list of accounts.
      */
     public ArrayList<Account> getAccounts() {
         return this.accounts;
@@ -51,18 +53,18 @@ public class Customer {
     /**
      * Gets the customer's ID.
      * 
-     * @return the customer ID
+     * @return the customer ID.
      */
-    public String getCustomerID() {
+    public int getCustomerID() {
         return customerID;
     }
 
     /**
      * Sets the customer's ID.
      * 
-     * @param customerID the new customer ID
+     * @param customerID the new customer ID.
      */
-    public void setCustomerID(String customerID) {
+    public void setCustomerID(int customerID) {
         this.customerID = customerID;
     }
 }

@@ -10,6 +10,10 @@ import java.util.Scanner;
 public class Savings extends Account {
     private int withdrawLimit = 6;
 
+    public Savings(int accountIDIn, double balanceIn){
+        super(accountIDIn, balanceIn);
+    }
+
     /**
      * Collects a positive double from user.
      * 

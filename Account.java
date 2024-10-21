@@ -10,11 +10,17 @@
 abstract class Account {
     // Attributes
     /** Identifier for the account. */
-    private String accountID;
+    private int accountID;
 
     /** Current Balance of the account. */
     private double balance;
 
+    // Constructors
+    public Account(){}
+    public Account(int accountIDIn, double balanceIn){
+        this.accountID = accountIDIn;
+        this.balance = balanceIn;
+    }
     // Methods
     /** Prompts user for amount as input 
      * 
@@ -35,7 +41,7 @@ abstract class Account {
      * 
      * @return accountID
      */
-    public String getAccountID() {
+    public int getAccountID() {
         return this.accountID;
     }
 
