@@ -1,7 +1,10 @@
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class holds the implemented functions called by RunBank.java in the main function.
@@ -30,6 +33,9 @@ public class UserInteractions {
 
     // For a shared scanner
     private static final Scanner scanner = new Scanner(System.in);
+  
+    private static Transaction_Log transactionLog = new Transaction_Log();
+
 
     // Register a shutdown hook to close the scanner when the program exits
     static {
@@ -208,6 +214,7 @@ public class UserInteractions {
                                "2 - Deposit\n" +
                                "3 - Withdraw\n" +
                                "4 - Transfer\n" +
+                               "5 - View Transaction Log\n" +  // Added option to view the log
                                "OR 'Exit' to end the program");
 
             switch (promptUser()) {
@@ -218,37 +225,68 @@ public class UserInteractions {
                     break;
 
                 // Prompts user to pick account. Then 
-                case "2":
-                    int checkingIndex = printChooseAccount("Deposit");
-                    customerIn.getAccount(checkingIndex).deposit();
+               case "2":
+                    int depositIndex = printChooseAccount("Deposit");
+                    customerIn.getAccount(depositIndex).deposit();
+                    transactionLog.logTransaction("Deposit made to Account #" + customerIn.getAccount(depositIndex).getAccountID());
+    
+                    // Save the changes to the CSV file
+                   
                     break;
 
+            // Withdraw from an account
                 case "3":
-                    int savingsIndex = printChooseAccount("Withdraw");
-                    customerIn.getAccount(savingsIndex).withdraw();
+                    int withdrawIndex = printChooseAccount("Withdraw");
+                    customerIn.getAccount(withdrawIndex).withdraw();
+                    transactionLog.logTransaction("Withdrawal from Account #" + customerIn.getAccount(withdrawIndex).getAccountID());
+
+                    // Save the changes to the CSV file
                     break;
 
                 case "4":
-                    int creditIndex = printChooseAccount("Transfer");
+                    int transferIndex = printChooseAccount("Transfer");
                     Customer foundAccount = new Customer();
                     while (true) {
                         System.out.println("--------------------------------------------------------------\n" +
                                            "Please insert the account number you wish to transfer money to.");
-
+                
                         Integer accountIDIn = Integer.parseInt(promptUser());
                         foundAccount = createCustomer(null, null, null, accountIDIn);
                         if (foundAccount != null) {
                             break;
                         }
                     }
-                    
-                    customerIn.getAccount(creditIndex).transferMoney(foundAccount.getAccount(transferAccountIndex));
+                
+                    customerIn.getAccount(transferIndex).transferMoney(foundAccount.getAccount(transferIndex));
+                    transactionLog.logTransaction("Transfer from Account #" + 
+                                                  customerIn.getAccount(transferIndex).getAccountID() + 
+                                                  " to Account #" + 
+                                                  foundAccount.getAccount(transferIndex).getAccountID());
+                
+                    // Save the changes to the CSV file
                     break;
+                  // View the transaction log
+                case "5":
+                    List<String> transactions = transactionLog.readLog();
+                    if (transactions.isEmpty()) {
+                        System.out.println("No transactions have been logged yet.");
+                    } else {
+                        System.out.println("Transaction Log:");
+                        for (String entry : transactions) {
+                            System.out.println(entry);
+                        }
+                    }
+                    break;
+
+                // Exit case
+                case "Exit":
+                    System.out.println("Exiting program. Goodbye!");
+                    return;
 
                 default:
                     System.out.println("Invalid Input.");
                     break;
-            }
+           }
         }
     }
 
@@ -399,7 +437,55 @@ public class UserInteractions {
         }
         return null; // Return null if no matching row is found
     }
-
+        /**
+     * Updates the customer information in the CSV file with the provided updated customer data.
+     * 
+     * This method reads the existing customer data from the Bankusers csv file, checks if the customer 
+     * specified by the updatedCustomers ID exists, and replaces that entry with the new data 
+     * from the updatedCustomer object. If the customer is not found, the file remains unchanged.
+     * 
+     * @param updatedCustomer The Customer object containing updated information to be saved 
+     *                       in the BankUserscsv file. The ID of this customer will be used to identify 
+     *                       the corresponding entry in the file.
+     * 
+     * @throws IOException If there is an error reading from or writing to the CSV file.
+     */
+    private static void updateBanksUsers(Customer updatedCustomer) {
+        List<String> fileContent = new ArrayList<>();
+        String line;
+    
+        // Read the CSV file line by line and store content in a list
+        try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers.csv"))) {
+            while ((line = reader.readLine()) != null) {
+                // Split the line into columns
+                String[] columns = line.split(",");
+                
+                // Check if this line is for the customer that was updated using their ID
+                int customerID = Integer.parseInt(columns[0].trim());
+    
+                if (customerID == updatedCustomer.getId()) {
+                    // Update this line with the new customer data
+                    // still needs to be finished
+                    //fileContent.add()
+                } else {
+                    // Keep the line as is for other customers
+                    fileContent.add(line);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading customer data from file: " + e.getMessage());
+            return;
+        }
+    
+        // Write the updated content back to the CSV file
+        try (FileWriter writer = new FileWriter("BankUsers.csv")) {
+            for (String contentLine : fileContent) {
+                writer.write(contentLine + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving updated customer data to file: " + e.getMessage());
+        }
+    }
     /**
      * Prompts the user to chose which account they'd like to chose.
      * Returns the index the account is found in Customer's account array.
