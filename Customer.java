@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * The Customer class represents a bank customer who can own multiple accounts.
  * It allows opening, adding, and removing accounts.
@@ -8,12 +6,14 @@ import java.util.ArrayList;
  */
 public class Customer {
     private int customerID;
-    private ArrayList<Account> accounts;
-    private Person user;
+    private Account accounts[];
+    private Person individual;
 
+    // Constructors
+    /** No param constructor */
     public Customer () {
-        this.accounts = new ArrayList<>();
     }
+
     /**
      * Constructs a Customer with a specified customer ID.
      * 
@@ -21,55 +21,66 @@ public class Customer {
      */
     public Customer(int customerIDIn) {
         this.customerID = customerIDIn;
-        this.accounts = new ArrayList<>();
     }
 
-    /**
-     * Adds an existing account to the customer's list of accounts.
-     * 
-     * @param account the account to be added.
-     */
-    public void addAccount(Account account) {
-        this.accounts.add(account);
+    // Methods
+    /** 
+     * Returns the type of a class as a string.
+     *  
+     * @return a string of the account type
+    */
+    public String getAccountType(int index) {
+        return accounts[index].getClass().getSimpleName();
     }
 
-    /**
-     * Removes an account based on its account number.
-     * 
-     * @param accountNumber the unique identifier of the account to be removed.
-     */
-    public void removeAccount(int accountNumber) {
-        accounts.removeIf(account -> account.getAccountID() == accountNumber);
-    }
-
-    /**
-     * Returns the list of accounts associated with the customer.
-     * 
-     * @return the list of accounts.
-     */
-    public ArrayList<Account> getAccounts() {
-        return this.accounts;
-    }
-
-    /**
-     * Gets the customer's ID.
-     * 
-     * @return the customer ID.
-     */
+    // Getters
+    /** @return the customer ID attribute. */
     public int getCustomerID() {
-        return customerID;
+        return this.customerID;
+    }
+    
+    /** 
+     * Retrieves the account at the specified index from the accounts array.
+     * 
+     * @param accountIndex the index of the desired account in the accounts array.
+     * 
+     * @return the checking account attribute. 
+     */
+    public Account getAccount(int accountIndex) {
+        return this.accounts[accountIndex];
+    }
+
+    /** @return the person attribute. */
+    public Person getPerson() {
+        return this.individual;
+    }
+
+    // Setters
+    /**
+     * Sets customerIDIn ID to customerID.
+     * 
+     * @param customerIDIn
+     */
+    public void setCustomerID(int customerIDIn) {
+        this.customerID = customerIDIn;
     }
 
     /**
-     * Sets the customer's ID.
+     * Sets the account at specific index in the account array.
      * 
-     * @param customerID the new customer ID.
+     * @param accountIn The account object being set.
+     * @param accountIndex The index the account is being set to in the array.
      */
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public void setAccount(Account accountIn, int accountIndex) {
+        this.accounts[accountIndex] = accountIn;
     }
 
-    public void setPerson(Person userIn){
-        this.user = userIn;
+    /**
+     * Sets the person attribute.
+     * 
+     * @param individualIn
+     */
+    public void setPerson(Person individualIn){
+        this.individual = individualIn;
     }
 }

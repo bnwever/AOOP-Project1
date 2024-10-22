@@ -1,11 +1,10 @@
-import java.io.File;
-
 /**
  * The RunBank class handles the interaction between the user and the program.
  * It also displays the starting and login menu.
  * @author Blaine 
  */
 public class RunBank {
+
     /**
      * The main method for the Bank Program.
      * @param args command line (unused)
@@ -13,31 +12,23 @@ public class RunBank {
     public static void main(String[] args) {
 
         // Check if BankUsers is sorted
-        isBankUsersSorted("SortedUsers");
+        UserInteractions.isBankUsersSorted("SortedUsers");
 
         // Print Start Screen
-        startScreen();
+        UserInteractions.startScreen();
 
         // Asks user if they are a Bank Manager
         UserInteractions.isManager();
 
+        // If User is Bank Manager
         if (UserInteractions.isBankManager) {
+            UserInteractions.findCustomer();
 
+        // If User is not Bank Manager
         } else {
-            
-        }
-    }
+           Customer user = UserInteractions.customerLogIn();
 
-    public static void startScreen() {
-        System.out.println("--------------------------------------------------------------\n" +
-                           "Welcome to El Paso Miners Bank!" +
-                           "At any time, type 'exit' to leave the program.");
-    }
-
-    public static void isBankUsersSorted(String csvName) {
-        File file = new File(csvName);
-        if (!file.exists() || file.length() == 0) {
-            UserInteractions.sortBankUsers();
+           UserInteractions.customerFunctions(user);
         }
     }
 }

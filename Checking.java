@@ -16,7 +16,7 @@ public class Checking extends Account {
     }
 
     /**
-     * Collects a positivedouble from user.
+     * Collects a positive double from user.
      * 
      * @return amount: the double collected
      */
