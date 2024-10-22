@@ -20,6 +20,12 @@ public class RunBank {
 
         // Asks user if they are a Bank Manager
         UserInteractions.isManager();
+
+        if (UserInteractions.isBankManager) {
+
+        } else {
+            
+        }
     }
 
     public static void startScreen() {

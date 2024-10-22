@@ -42,80 +42,7 @@ public class UserInteractions {
      * If the user exceeds attempts the program will end.
      */
     public static Customer customerLogIn(){
-        int attempts = 0;
-        int customerID;
-        Customer User = new Customer();
-        while (true) {
-            // Prompts user for ID Number0
-            System.out.println("--------------------------------------------------------------\n" +
-            "Enter in your Identification Number: ");
-            customerID = Integer.parseInt(promptUser());
-
-            // Prompts user for DOB
-            System.out.println("--------------------------------------------------------------\n" +
-            "Enter in your Date of Birth (Day-Month-Year) [XX-ABC-XX]: ");
-            String customerDOB = promptUser();
-
-            // Attempts to find customer in BankUsers.csv file
-            Boolean accountFound = false;
-            try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers.csv"))){
-                String line;
-
-                // Traverse through each row in file
-                while ((line = reader.readLine()) != null) {
-                    String[] columns = line.split(",");
-                    if (columns.length > 0){
-                        try {
-                            int number = Integer.parseInt(columns[0].trim());
-                            String DOB = columns[3].trim();
-
-                            // Checks if ID and DOB match user's login input.
-                            // Sets User CustomerID and accounts.
-                            if (number == customerID && DOB.equals(customerDOB)) {
-                                accountFound = true;
-
-                                User.setCustomerID(customerID);
-
-                                int checkingID = Integer.parseInt(columns[6].trim());
-                                int checkingBalance = Integer.parseInt(columns[7].trim());
-                                User.addAccount(new Checking(checkingID, checkingBalance));
-
-                                int savingsID = Integer.parseInt(columns[6].trim());
-                                int savingsBalance = Integer.parseInt(columns[7].trim());
-                                User.addAccount(new Savings(savingsID, savingsBalance));
-
-                                int creditID = Integer.parseInt(columns[6].trim());
-                                int creditBalance = Integer.parseInt(columns[7].trim());
-                                User.addAccount(new Credit(creditID, creditBalance));
-
-                                break;
-                            }
-
-                        } catch (NumberFormatException e) {}
-                    }
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // If customer info found break the login loop.
-            if (accountFound) {
-                break;
-            }
-            // If account not found re-attempt.
-            else if (attempts < 3) {
-                attempts++;
-                System.out.printf("Login Failure. Check your Identification number or password%n" +
-                                  "%d attemps left.%n", (3 - attempts));
-            }
-            // If account not found and no more attempts end program.
-            else {
-                System.exit(0);
-            }
-        }
-        // Returns Customer Class with CustomerID set (accounts not set)
-        return User;
+        return new Customer();
     }
 
     /**
@@ -131,6 +58,16 @@ public class UserInteractions {
             switch (promptUser()) {
                 case "A":
                 case "a":
+                    System.out.println("--------------------------------------------------------------\n" +
+                                       "Please enter the ID of the account. ");
+                    while (true) {
+                        Customer checkingUser = createCustomerByID(Integer.parseInt(promptUser()));
+                        if (checkingUser != null) {
+                            break;
+                        } else {
+                            System.out.println("Customer ID was not found");
+                        }
+                    }
                     break;
                 
                 case "B":
@@ -199,13 +136,115 @@ public class UserInteractions {
         }
     }
 
-    public static Customer createCustomerByName() {
-        return new Customer();
+    public static Customer createCustomerByName(String firstNameIn, String lastNameIn) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers.csv"))){
+            String line;
+            // Traverse through each row in file
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split(",");
+                if (columns.length > 0){
+                    try {
+                        String firstName = columns[1].trim();
+                        String lastName = columns[2].trim();
+
+                        if (firstName == firstNameIn && lastName == lastNameIn) {
+                            Customer User = new Customer();
+                            // Set CustomerID
+                            User.setCustomerID(Integer.parseInt(columns[1].trim()));
+
+                            // Create and set Person Class
+                            String name = columns[1].trim() + columns[2].trim();
+                            String address = columns[4].trim();
+                            Person individual = new Person(name, address);
+                            User.setPerson(individual);
+                            
+
+                            // Create a Checking class and set to Customer Class
+                            int checkingID = Integer.parseInt(columns[6]);
+                            int checkingBalance = Integer.parseInt(columns[7]);
+                            Checking userChecking = new Checking(checkingID, checkingBalance);
+                            User.addAccount(userChecking);
+
+                            // Create a Savings class and set to Customer Class
+                            int savingsID = Integer.parseInt(columns[8]);
+                            int savingsBalance = Integer.parseInt(columns[9]);
+                            Checking userSavings = new Checking(savingsID, savingsBalance);
+                            User.addAccount(userSavings);
+
+                            // Create a Credit class and set to Customer Class
+                            int creditID = Integer.parseInt(columns[10]);
+                            int creditBalance = Integer.parseInt(columns[11]);
+                            Checking userCredit = new Checking(creditID, creditBalance);
+                            User.addAccount(userCredit);
+
+                            return User;
+                        }
+
+                    } catch (NumberFormatException e) {}
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Return null if customer name wasnt found
+        return null;
     }
 
     public static Customer createCustomerByID(int customerIDIn) {
-        
-        return new Customer();
+        try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers.csv"))){
+            String line;
+
+            // Traverse through each row in file
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split(",");
+                if (columns.length > 0){
+                    try {
+                        int number = Integer.parseInt(columns[0].trim());
+
+                        if (number == customerIDIn) {
+                            Customer User = new Customer();
+
+                            // Set CustomerID
+                            User.setCustomerID(customerIDIn);
+
+                            // Create and set Person Class
+                            String name = columns[1].trim() + columns[2].trim();
+                            String address = columns[4].trim();
+                            Person individual = new Person(name, address);
+                            User.setPerson(individual);
+                            
+
+                            // Create a Checking class and set to Customer Class
+                            int checkingID = Integer.parseInt(columns[6]);
+                            int checkingBalance = Integer.parseInt(columns[7]);
+                            Checking userChecking = new Checking(checkingID, checkingBalance);
+                            User.addAccount(userChecking);
+
+                            // Create a Savings class and set to Customer Class
+                            int savingsID = Integer.parseInt(columns[8]);
+                            int savingsBalance = Integer.parseInt(columns[9]);
+                            Checking userSavings = new Checking(savingsID, savingsBalance);
+                            User.addAccount(userSavings);
+
+                            // Create a Credit class and set to Customer Class
+                            int creditID = Integer.parseInt(columns[10]);
+                            int creditBalance = Integer.parseInt(columns[11]);
+                            Checking userCredit = new Checking(creditID, creditBalance);
+                            User.addAccount(userCredit);
+
+                            return User;
+                        }
+
+                    } catch (NumberFormatException e) {}
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Return null if customer id wasnt found
+        return null;
     }
 
     public static void sortBankUsers() { 

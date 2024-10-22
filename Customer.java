@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Customer {
     private int customerID;
     private ArrayList<Account> accounts;
+    private Person user;
 
     public Customer () {
         this.accounts = new ArrayList<>();
@@ -66,5 +67,9 @@ public class Customer {
      */
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
+    }
+
+    public void setPerson(Person userIn){
+        this.user = userIn;
     }
 }

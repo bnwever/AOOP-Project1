@@ -19,6 +19,8 @@ public class Person {
         this.address = addressIn;
     }
 
+    public Person(){}
+
     /**
      * Gets the name of the person.
      * 
@@ -35,6 +37,14 @@ public class Person {
      */
     public String getAddress() {
         return this.address;
+    }
+
+    public void setName(String nameIn) {
+        this.name = nameIn;
+    }
+
+    public void setAddress(String addressIn) {
+        this.address = addressIn;
     }
 }
 
