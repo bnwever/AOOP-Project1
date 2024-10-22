@@ -1,13 +1,22 @@
-import java.util.Arrays;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.File;
-import java.util.Arrays;
 
+/**
+ * This class holds the implemented functions called by RunBank.java in the main function.
+ * This is done to keep the design more organized.
+ * 
+ * The class is split into TWO main parts (not including attributes).
+ * Part 1 - Functions directly called by RunBank.java.
+ * Part 2 - Functions used by Functions in Part 1 to help keep the code organized and readable.
+ * 
+ * @author Jesus Ordaz and Blaine Wever
+ */
 public class UserInteractions {
+
+    // -----------------------------------------------------------------------------------------------------------------------------------------------
+    // Attributes
     /**
      * Indicates if the user is a bank manager.
      * True if user is bank manager, otherwise false.
@@ -16,46 +25,21 @@ public class UserInteractions {
      */
     static Boolean isBankManager;
 
+    /** When transfering money, this variable keeps track of the account index for the account the user wants to transfer to. */
     private static int transferAccountIndex;
 
-    private static final Scanner scanner = new Scanner(System.in); // For a shared scanner
+    // For a shared scanner
+    private static final Scanner scanner = new Scanner(System.in);
 
+    // Register a shutdown hook to close the scanner when the program exits
     static {
-        // Register a shutdown hook to close the scanner when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> scanner.close()));
     }
 
-    public static String promptUser() {
-        System.out.print("> ");
-        String input = scanner.nextLine();
-        isExit(input);  // Exits program if input is "exit" or "Exit"
-        return input;
-    }
+    // -----------------------------------------------------------------------------------------------------------------------------------------------
+    // Part 1 : Directly Called Functions by RunBank.java
 
-    public static void isExit(String inputIn) {
-        if (inputIn.equalsIgnoreCase("exit")) {
-            System.out.println("Exiting program...");
-            System.exit(0);  // Ensure shutdown hook runs
-        }
-    }
-
-    /**
-     * Checks if there's a sorted version of BankUsers.
-     * Does nothing if there version found.
-     * Creates a sorted version if version not found.
-     * 
-     * @param csvName: The name of the sorted User Information
-     */
-    public static void isBankUsersSorted(String csvName) {
-        File file = new File(csvName);
-        if (!file.exists() || file.length() == 0) {
-            UserInteractions.sortBankUsers();
-        }
-    }
-
-    /**
-     * 
-     */
+    /** Displays the start/welcome screen for the program */
     public static void startScreen() {
         System.out.println("--------------------------------------------------------------\n" +
                            "Welcome to El Paso Miners Bank!" +
@@ -89,6 +73,77 @@ public class UserInteractions {
             }
 
             else System.out.println("Invalid Input"); // User input is invalid
+        }
+    }
+
+    /**
+     * Prompts user to choose ID or Name of a customer to find.
+     * Program then prints the information of the customer.
+     */
+    public static void findCustomer() {
+        // (outer) Loop to ensure user inputs "a"/"A" or "b"/"B"
+        Boolean customerFound = false;
+        while (!customerFound) {
+            Customer searchedCustomer = new Customer(); // Class we're going to put our found customer in.
+            System.out.println("--------------------------------------------------------------\n" +
+                               "Enter in the option you'd like to choose...\n" +
+                               "A. Find customer by ID\n" +
+                               "B. Find customer by Name");
+
+            // Determine if user wants to find account based on ID or Name
+            switch (promptUser()) {
+
+                // Finds customer based on ID.
+                case "A":
+                case "a":
+                    // (inner) Loop until a customer is found.
+                    while (true) {
+                        System.out.println("--------------------------------------------------------------\n" +
+                                       "Please enter the ID of the account.");
+                        
+                        // Searches for customer and creates Customer Class based on ID inputed
+                        searchedCustomer = createCustomer(Integer.parseInt(promptUser()), null, null, null);
+                        if (searchedCustomer == null) { // checkingUser is null if customer isn't found.
+                            System.out.println("Customer ID was not found.");
+                        } else {
+                            customerFound = true; // Keeps outer loop from running again
+                            break; // Breaks inner loop
+                        }
+                    }
+                    break; // Breaks switch case
+                
+                // Finds customer based on Name.
+                case "B":
+                case "b":
+                    // (inner) Loop until a customer is found.
+                    while (true) {
+                        // Asks and recieves first and last name of desired customer.
+                        System.out.println("--------------------------------------------------------------\n" +
+                                           "Please enter the Name of the account.");
+                        System.out.println("First name:");
+                        String firstName = promptUser();
+                        System.out.println("Last name:");
+                        String lastName = promptUser();
+
+                        // Searches for customer and creates Customer class based on Names inputed
+                        searchedCustomer = createCustomer(null, firstName, lastName, null);
+                        if (searchedCustomer == null) { // checkingUser is null if customer isn't found.
+                            System.out.println("Customer name was not found.");
+                        } else {
+                            customerFound = true; // Keeps outer loop from running again
+                            break; // Breaks inner loop
+                        }
+                    }
+                    break; // Breaks switch case
+
+                // Invalid Input case. Outer loop keeps running
+                default:
+                    System.out.println("Invalid Input.");
+                    break; 
+            }
+            
+            // Prints out customer's information.
+            printCustomerInfo(searchedCustomer);
         }
     }
 
@@ -141,85 +196,8 @@ public class UserInteractions {
         return User;
     }
 
-     /** Creates a filled Customer class based on inputed ID or Name and prints the info. */
-    public static void findCustomer() {
-        while (true) {
-            System.out.println("--------------------------------------------------------------\n" +
-                               "Enter in the option you'd like to choose...\n" +
-                               "A. Find customer by ID\n" +
-                               "B. Find customer by Name");
-
-            Customer searchedCustomer = new Customer();
-            switch (promptUser()) {
-                // Finds customer based on ID.
-                case "A":
-                case "a":
-                    // Loop until a customer is found.
-                    while (true) {
-                        System.out.println("--------------------------------------------------------------\n" +
-                                       "Please enter the ID of the account.");
-                        searchedCustomer = createCustomer(Integer.parseInt(promptUser()), null, null, null);
-                        if (searchedCustomer != null) { // checkingUser is null if customer isn't found.
-                            break;
-                        } else {
-                            System.out.println("Customer ID was not found.");
-                        }
-                    }
-                    break;
-                
-                // Finds customer based on Name.
-                case "B":
-                case "b":
-                    // Loop until a customer is found.
-                    while (true) {
-                        System.out.println("--------------------------------------------------------------\n" +
-                                           "Please enter the Name of the account.");
-                        System.out.println("First name:");
-                        String firstName = promptUser();
-                        System.out.println("Last name:");
-                        String lastName = promptUser();
-
-                        searchedCustomer = createCustomer(null, firstName, lastName, null);
-                        if (searchedCustomer != null) { // checkingUser is null if customer isn't found.
-                            break;
-                        } else {
-                            System.out.println("Customer name was not found.");
-                        }
-                    }
-                    break;
-
-                default:
-                    System.out.println("Invalid Input.");
-                    break;
-            }
-            
-            // Prints out customer's information.
-            printCustomerInfo(searchedCustomer);
-        }
-    }
-
-    /** Prints Customer info. Customer, Person, and it's accounts. */
-    public static void printCustomerInfo(Customer searchedCustomer) {
-        System.out.println("--------------------------------------------------------------\n");
-        System.out.println("Customer ID: " + searchedCustomer.getCustomerID());
-        System.out.println("Name: " + searchedCustomer.getPerson().getName());
-        System.out.println("Address: " + searchedCustomer.getPerson().getAddress());
-
-        System.out.println(searchedCustomer.getAccountType(0) + " Account -");
-        System.out.println("\tID: " + searchedCustomer.getAccount(0).getAccountID());
-        System.out.println("\tBalance: " + searchedCustomer.getAccount(0).getBalance());
-
-        System.out.println(searchedCustomer.getAccountType(1) + " Account -");
-        System.out.println("\tID: " + searchedCustomer.getAccount(1).getAccountID());
-        System.out.println("\tBalance: " + searchedCustomer.getAccount(1).getBalance());
-
-        System.out.println(searchedCustomer.getAccountType(2) + " Account -");
-        System.out.println("\tID: " + searchedCustomer.getAccount(2).getAccountID());
-        System.out.println("\tBalance: " + searchedCustomer.getAccount(2).getBalance());
-    }
-
     /**
-     * 
+     * This function 
      */
     public static void customerFunctions(Customer customerIn) {
         while (true) {
@@ -233,10 +211,13 @@ public class UserInteractions {
                                "OR 'Exit' to end the program");
 
             switch (promptUser()) {
+
+                // Prints Customer Information
                 case "1":
                     printCustomerInfo(customerIn);
                     break;
 
+                // Prompts user to pick account. Then 
                 case "2":
                     int checkingIndex = printChooseAccount("Deposit");
                     customerIn.getAccount(checkingIndex).deposit();
@@ -271,39 +252,68 @@ public class UserInteractions {
         }
     }
 
-    /**
-     * Prompts the user to chose which account they'd like to chose.
-     * Returns the index the account is found in Customer's account array.
+    // -----------------------------------------------------------------------------------------------------------------------------------------------
+    // Part 2: Helper Functions Called By Functions in Part 1
+
+     /**
+     * Prompts user for an input.
+     * Checks if input isExit. If true, stops the program. If false, do nothing.
      * 
-     * @param functionName: Dynamic menu based on what function is wanting to be used
-     * @return index where account is found in account array.
+     * @return input
      */
-    public static int printChooseAccount(String functionName){
-        System.out.println("--------------------------------------------------------------\n" +
-                           "Which account would you like to " + functionName + " in?\n" +
-                           "--------------------------------------------------------------\n" +
-                           "1 - Checking\n" +
-                           "2 - Savings\n" +
-                           "3 - Credit");
+    public static String promptUser() {
+        System.out.print("> ");
+        String input = scanner.nextLine();
+        isExit(input);  // Exits program if input is "exit" or "Exit"
+        return input;
+    }
 
-        // Loops until valid input
-        while (true) {
-            String decision = promptUser();
-            if (decision.equals("1")) {
-                return 0; // Checking account index
-
-            } else if (decision.equals("2")) {
-                return 1; // Savings account index
-
-            } else if (decision.equals("3")) {
-                return 2; // Credit account index
-
-            } else {
-                System.out.println("Invalid Input");
-            }
+    /**
+     * Ends the program if the input is "exit" or "Exit"
+     * 
+     * @param inputIn: The input
+     */
+    public static void isExit(String inputIn) {
+        if (inputIn.equalsIgnoreCase("exit")) {
+            System.out.println("Exiting program...");
+            System.exit(0);  // Ensure shutdown hook runs
         }
     }
 
+    /** Prints Customer info. Customer, Person, and it's accounts. */
+    public static void printCustomerInfo(Customer searchedCustomer) {
+        System.out.println("--------------------------------------------------------------\n");
+        System.out.println("Customer ID: " + searchedCustomer.getCustomerID());
+        System.out.println("Name: " + searchedCustomer.getPerson().getName());
+        System.out.println("Address: " + searchedCustomer.getPerson().getAddress());
+
+        System.out.println(searchedCustomer.getAccountType(0) + " Account -");
+        System.out.println("\tID: " + searchedCustomer.getAccount(0).getAccountID());
+        System.out.println("\tBalance: " + searchedCustomer.getAccount(0).getBalance());
+
+        System.out.println(searchedCustomer.getAccountType(1) + " Account -");
+        System.out.println("\tID: " + searchedCustomer.getAccount(1).getAccountID());
+        System.out.println("\tBalance: " + searchedCustomer.getAccount(1).getBalance());
+
+        System.out.println(searchedCustomer.getAccountType(2) + " Account -");
+        System.out.println("\tID: " + searchedCustomer.getAccount(2).getAccountID());
+        System.out.println("\tBalance: " + searchedCustomer.getAccount(2).getBalance());
+    }
+
+    /**
+     * Finds a row(customer) then creates and returns a Customer based on the row(customer) found.
+     * There are three different ways to find a customer.
+     * 1. By Customer ID -  createCustomer(customerIDIn, null, null, null)
+     * 2. By Name -         createCustomer(null, firstNameIn, lastNameIn, null)
+     * 3. By Account ID -   creaCustomer(null, null, null, accountIDIn)
+     * 
+     * @param customerIDIn
+     * @param firstNameIn
+     * @param lastNameIn
+     * @param accountIDIn
+     * 
+     * @return user: A newly created Customer Class
+     */
     public static Customer createCustomer(Integer customerIDIn, String firstNameIn, String lastNameIn, Integer accountIDIn) {
          // Find the row based on either ID or Name
         String[] columns = findRow(customerIDIn, firstNameIn, lastNameIn, accountIDIn);
@@ -311,77 +321,38 @@ public class UserInteractions {
         if (columns == null) return null; // Return null if the row (customer) wasn't found
     
     
-        Customer user = new Customer(); // Create Customer object
+        Customer User = new Customer(); // Create Customer object
     
         // Create and set a Person object for the user: Person(First Name, Last Name, Address)
         Person individual = new Person(columns[1].trim() + columns[2].trim(), columns[4].trim());
-        user.setPerson(individual);
+        User.setPerson(individual);
     
         // Create and set Checking account: Checking(CheckingID, CheckingBalance)
         Checking userChecking = new Checking(Integer.parseInt(columns[6]), Integer.parseInt(columns[7]));
-        user.setAccount(userChecking, 0);
+        User.setAccount(userChecking, 0);
     
         // Create and set Savings account: Savings(SavingsID, SavingsBalance)
         Savings userSavings = new Savings(Integer.parseInt(columns[8]), Integer.parseInt(columns[9]));
-        user.setAccount(userSavings, 1);
+        User.setAccount(userSavings, 1);
     
         // Create and set Credit account: Credit(CreditID, CreditBalance)
         Credit userCredit = new Credit(Integer.parseInt(columns[10]), Integer.parseInt(columns[11]));
-        user.setAccount(userCredit, 2);
+        User.setAccount(userCredit, 2);
     
-        return user;
+        return User;
     }
 
-    public static void sortBankUsers() { 
-        String inputFile = "BankUsers.csv";
-        String outputFile = "SortedUsers.csv";
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-            reader.readLine(); // Get rid of header
-
-            // Store lines in an array
-            String[] lines = new String[104]; // 140 - About as many customers the bank has (no implementation on adding customers)
-            int lineCount = 0;
-            String line;
-
-            // Read lines into array lines[]
-            while ((line = reader.readLine()) != null) {
-                if (lineCount >= lines.length) {
-                    String[] newLines = new String[lines.length * 2];
-                    System.arraycopy(lines, 0, newLines, 0, lines.length);
-                    lines = newLines;
-                }
-                lines[lineCount++] = line;
-            }
-
-            // Sort the file by identification num
-            for (int i = 0; i < lineCount - 1; i++) {
-                for (int j = 0; j < lineCount - 1 - i; j++) {
-                    int firstColumn1 = Integer.parseInt(lines[j].split(",")[0].trim());
-                    int firstColumn2 = Integer.parseInt(lines[j + 1].split(",")[0].trim());
-
-                    if (firstColumn1 > firstColumn2) {
-                        // Swap lines
-                        String temp = lines[j];
-                        lines[j] = lines[j + 1];
-                        lines[j + 1] = temp;
-                    }
-                }
-            }
-
-            // Write the sorted lines to the output file
-            try (PrintWriter writer = new PrintWriter(outputFile)) {
-                for (int i = 0; i < lineCount; i++) {
-                    writer.println(lines[i]);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * 
+     * @param customerIDIn
+     * @param firstNameIn
+     * @param lastNameIn
+     * @param accountIDIn
+     * 
+     * @return columns: An array of strings holding the contents of a single row from BankUsers.csv
+     */
     public static String[] findRow(Integer customerIDIn, String firstNameIn, String lastNameIn, Integer accountIDIn) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("SortedUsers"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] columns = line.split(",");
@@ -427,5 +398,38 @@ public class UserInteractions {
         } catch (IOException e) {
         }
         return null; // Return null if no matching row is found
+    }
+
+    /**
+     * Prompts the user to chose which account they'd like to chose.
+     * Returns the index the account is found in Customer's account array.
+     * 
+     * @param functionName: Dynamic menu based on what function is wanting to be used
+     * @return index where account is found in account array.
+     */
+    public static int printChooseAccount(String functionName){
+        System.out.println("--------------------------------------------------------------\n" +
+                           "Which account would you like to " + functionName + " in?\n" +
+                           "--------------------------------------------------------------\n" +
+                           "1 - Checking\n" +
+                           "2 - Savings\n" +
+                           "3 - Credit");
+
+        // Loops until valid input
+        while (true) {
+            String decision = promptUser();
+            if (decision.equals("1")) {
+                return 0; // Checking account index
+
+            } else if (decision.equals("2")) {
+                return 1; // Savings account index
+
+            } else if (decision.equals("3")) {
+                return 2; // Credit account index
+
+            } else {
+                System.out.println("Invalid Input");
+            }
+        }
     }
 }
