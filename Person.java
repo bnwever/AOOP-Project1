@@ -38,11 +38,19 @@ public class Person {
     public String getAddress() {
         return this.address;
     }
-
+    /**
+     * Sets the name of the person.
+     *
+     * @param nameIn the name to be set
+     */
     public void setName(String nameIn) {
         this.name = nameIn;
     }
-
+    /**
+     * Sets the address of the person.
+     *
+     * @param addressIn the address to be set
+     */    
     public void setAddress(String addressIn) {
         this.address = addressIn;
     }
