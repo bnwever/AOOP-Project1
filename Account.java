@@ -5,7 +5,7 @@
  * checking, credit, and savings classes to implement.
  * Provides getter and setter methods for accountID and balance.
  * 
- * @author Blaine Wever
+ * @author Blaine
  */
 abstract class Account {
     // Attributes

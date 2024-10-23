@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Provides implementation for the abstract methods such as collecting amount from user,
  * deposit function, withdraw function, and money transferring.
  * 
- * @author Blaine Wever
+ * @author Blaine
  */
 public class Credit extends Account {
     private double creditLimit;

@@ -1,6 +1,6 @@
 /**
  * 
- * @author Jesus Ordaz and Blaine Wever
+ * @author Jesus Ordaz and Blaine
  */
 public class RunBank {
 

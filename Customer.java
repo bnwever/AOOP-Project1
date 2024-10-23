@@ -2,7 +2,7 @@
  * The Customer class represents a bank customer who can own multiple accounts.
  * It allows opening, adding, and removing accounts.
  * 
- * @author Jesus Ordaz
+ * @author Jesus Ordaz  
  */
 public class Customer {
     private int customerID;

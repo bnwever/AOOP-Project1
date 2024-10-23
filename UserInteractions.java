@@ -14,7 +14,7 @@ import java.util.List;
  * Part 1 - Functions directly called by RunBank.java.
  * Part 2 - Functions used by Functions in Part 1 to help keep the code organized and readable.
  * 
- * @author Jesus Ordaz and Blaine Wever
+ * @author Jesus Ordaz and Blaine
  */
 public class UserInteractions {
 
