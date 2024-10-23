@@ -8,7 +8,7 @@ public class RunBank {
      * The main method for the Bank Program.
      * 
      * @param args command line (unused)
-    */  
+     */
     public static void main(String[] args) {
 
         // Print Start Screen
@@ -16,6 +16,9 @@ public class RunBank {
 
         // Asks user if they are a Bank Manager
         UserInteractions.isManager();
+
+        // Create a TransactionLog with a capacity of 100 (you can adjust this value)
+        TransactionLog transactionLog = new TransactionLog(100);
 
         // If User is Bank Manager
         // Breaks loop/ends program when user enters "exit"
@@ -26,7 +29,8 @@ public class RunBank {
         // Customer logIn (not Bank Manager)
         Customer user = UserInteractions.customerLogIn();
 
-        // Gives Menu to check accounts, deposity, withdraw, or transfer money
-        UserInteractions.customerFunctions(user);
+        // Gives Menu to check accounts, deposit, withdraw, or transfer money
+        // Pass the user and transactionLog to customerFunctions
+        UserInteractions.customerFunctions(user, transactionLog);
     }
 }
