@@ -332,7 +332,7 @@ public class UserInteractions {
             try {
                 double amount = account.collectAmount();
                 
-                // Optional: You can add a check to ensure the amount is positive.
+                
                 if (amount < 0) {
                     System.out.println("Amount must be positive. Please try again.");
                     continue;
