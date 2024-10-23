@@ -1,10 +1,10 @@
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
+//import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
 /**
  * This class holds the implemented functions called by RunBank.java in the main function.
@@ -219,51 +219,86 @@ public class UserInteractions {
      * 
      * @param customerIn the customer object that stores the user's information
      */
-    public static void customerFunctions(Customer customerIn) {
+    public static void customerFunctions(Customer customerIn, TransactionLog transactionLog) {
         while (true) {
             System.out.println("--------------------------------------------------------------\n" +
-                               "Please insert the number for the function you'd like to use.\n" +
-                               "--------------------------------------------------------------\n" +
-                               "1 - Check All Accounts\n" +
-                               "2 - Deposit\n" +
-                               "3 - Withdraw\n" +
-                               "4 - Transfer\n" +
-                               "OR 'Exit' to end the program");
-
+                    "Please insert the number for the function you'd like to use.\n" +
+                    "--------------------------------------------------------------\n" +
+                    "1 - Check All Accounts\n" +
+                    "2 - Deposit\n" +
+                    "3 - Withdraw\n" +
+                    "4 - Transfer\n" +
+                    "OR 'Exit' to end the program");
+    
             switch (promptUser()) {
+    
                 // Prints Customer Information
                 case "1":
                     printCustomerInfo(customerIn);
                     break;
-
-                // Prompts user to pick account. Then 
+    
+                // Prompts user to pick account for Deposit
                 case "2":
                     int checkingIndex = printChooseAccount("Deposit");
-                    customerIn.getAccount(checkingIndex).deposit();
+                    Account depositAccount = customerIn.getAccount(checkingIndex);
+                    
+                    
+                    double depositAmount = promptForAmount(depositAccount);
+                    
+                    
+                    depositAccount.deposit();
+                    
+                    // Log the transaction
+                    logTransactionDetails(transactionLog, "Deposit", depositAmount, depositAccount, null);
+                    
                     break;
-
+    
+                // Prompts user to pick account for Withdrawal
                 case "3":
                     int savingsIndex = printChooseAccount("Withdraw");
-                    customerIn.getAccount(savingsIndex).withdraw();
+                    Account withdrawalAccount = customerIn.getAccount(savingsIndex);
+                    
+                    
+                    double withdrawalAmount = promptForAmount(withdrawalAccount);
+                    
+                    
+                    withdrawalAccount.withdraw();
+                    
+                    // Log the transaction
+                    logTransactionDetails(transactionLog, "Withdrawal", withdrawalAmount, withdrawalAccount, null);
+                    
                     break;
-
+    
+                // Prompts user to pick account for Transfer
                 case "4":
                     int creditIndex = printChooseAccount("Transfer");
+                    Account sourceAccount = customerIn.getAccount(creditIndex);
+                    
                     Customer foundAccount = new Customer();
                     while (true) {
                         System.out.println("--------------------------------------------------------------\n" +
-                                           "Please insert the account number you wish to transfer money to.");
-
+                                "Please insert the account number you wish to transfer money to.");
+    
                         Integer accountIDIn = Integer.parseInt(promptUser());
                         foundAccount = createCustomer(null, null, null, accountIDIn);
                         if (foundAccount != null) {
                             break;
                         }
                     }
+    
+                    Account targetAccount = foundAccount.getAccount(transferAccountIndex);
                     
-                    customerIn.getAccount(creditIndex).transferMoney(foundAccount.getAccount(transferAccountIndex));
+                    
+                    double transferAmount = promptForAmount(sourceAccount);
+                    
+                    
+                    sourceAccount.transferMoney(targetAccount);
+                    
+                    // Log the transaction
+                    logTransactionDetails(transactionLog, "Transfer", transferAmount, sourceAccount, targetAccount);
+                    
                     break;
-
+    
                 default:
                     System.out.println("Invalid Input.");
                     break;
@@ -286,6 +321,30 @@ public class UserInteractions {
         isExit(input);  // Exits program if input is "exit" or "Exit"
         return input;
     }
+    /**
+     * Prompts the user to enter a monetary amount using the collectAmount method of the Account.
+     *
+     * @param account The Account object to collect the amount for (using its collectAmount method).
+     * @return The valid amount entered by the user as a double.
+     */
+    public static double promptForAmount(Account account) {
+        while (true) {
+            try {
+                double amount = account.collectAmount();
+                
+                // Optional: You can add a check to ensure the amount is positive.
+                if (amount < 0) {
+                    System.out.println("Amount must be positive. Please try again.");
+                    continue;
+                }
+                
+                return amount;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
+    }
+
 
     /**
      * Ends the program if the input is "exit" or "Exit"
@@ -453,6 +512,37 @@ public class UserInteractions {
             }
         }
     }
+        /**
+     * Logs a transaction to the TransactionLog.
+     *
+     * @param transactionLog The TransactionLog instance where the transaction will be recorded.
+     * @param type           The type of transaction (e.g., "Deposit", "Withdrawal", "Transfer").
+     * @param amount         The amount of the transaction.
+     * @param sourceAccount  The account from which the transaction originates.
+     * @param targetAccount  The target account for transfers (can be null if not applicable).
+     */
+    public static void logTransactionDetails(TransactionLog transactionLog, String type, double amount, Account sourceAccount, Account targetAccount) {
+        String logEntry;
+
+        switch (type) {
+            case "Deposit":
+                logEntry = String.format("Deposit of $%.2f to account %d.", amount, sourceAccount.getAccountID());
+                break;
+            case "Withdrawal":
+                logEntry = String.format("Withdrawal of $%.2f from account %d.", amount, sourceAccount.getAccountID());
+                break;
+            case "Transfer":
+                logEntry = String.format("Transfer of $%.2f from account %d to account %d.",
+                        amount, sourceAccount.getAccountID(), targetAccount.getAccountID());
+                break;
+            default:
+                logEntry = "Unknown transaction type.";
+                break;
+        }
+
+        // Log the transaction
+        transactionLog.logTransaction(logEntry);
+    }
 
     /**
      * Updates the customer information in the CSV file with the provided updated customer data.
@@ -467,7 +557,7 @@ public class UserInteractions {
      * 
      * @throws IOException If there is an error reading from or writing to the CSV file.
      */
-    private static void updateBanksUsers(Customer updatedCustomer) {
+   /**private static void updateBanksUsers(Customer updatedCustomer) {
         List<String> fileContent = new ArrayList<>();
         String line;
     
@@ -502,5 +592,5 @@ public class UserInteractions {
         } catch (IOException e) {
             System.out.println("Error saving updated customer data to file: " + e.getMessage());
         }
-    }
+    }*/
 }
