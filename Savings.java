@@ -10,6 +10,9 @@ import java.util.Scanner;
 public class Savings extends Account {
     private int withdrawLimit = 6;
 
+    // Use a single Scanner instance for user input throughout the class.
+    private static final Scanner scanner = new Scanner(System.in);
+
     public Savings(int accountIDIn, double balanceIn){
         super(accountIDIn, balanceIn);
     }
@@ -17,47 +20,39 @@ public class Savings extends Account {
     /**
      * Collects a positive double from user.
      * 
-     * @return amount: the double collected.
+     * @return amount: the double collected
      */
     @Override
     public double collectAmount() {
-        Scanner scanner = null;
-        double amount = 0; 
-    
-        try {
-            scanner = new Scanner(System.in);
-            
-            while (true) {
-                System.out.print("Enter an amount:\n$ ");
-    
-                // Check if input is double
-                if (scanner.hasNextDouble()) {
-                    amount = scanner.nextDouble();
-                    System.out.println(amount); // TO DELETE: for debugging
-                } else {
-                    System.out.println("Invalid input. Input was not a double.");
-                }
+        double amount = 0;
 
-                // Check if input is also positive
-                if (amount < 0) {
+        while (true) {
+            System.out.print("Enter an amount:\n$ ");
+
+            // Check if input is double
+            if (scanner.hasNextDouble()) {
+                amount = scanner.nextDouble();
+                
+                // Check if input is positive
+                if (amount >= 0) {
+                    break;
+                } else {
                     System.out.println("Invalid input. Input was not positive or zero.");
-                } else break;
+                }
+            } else {
+                System.out.println("Invalid input. Input was not a double.");
+                scanner.next(); // Clear invalid input
             }
-        } catch (Exception e) {
-            System.out.println("Error");
-        } finally {
-            scanner.close(); 
         }
-        
-        return amount; 
-    } 
+        return amount;
+    }
 
     /** Adds amount inputed to balance. */
     @Override
     public void deposit() {
         double amount = collectAmount();
         this.setBalance(this.getBalance() + amount);
-        System.out.printf("Process Success: Currente Balance = %.2f\n");
+        System.out.println("Process Success: Currente Balance = " + this.getBalance());
     }
 
     /** 
@@ -73,7 +68,7 @@ public class Savings extends Account {
         this.setBalance(this.getBalance() - amountWithinBalance());
         this.withdrawLimit -= 1;
 
-        System.out.printf("Process Success: Current Balance = %.2f\n", this.getBalance());
+        System.out.println("Process Success: Current Balance = " + this.getBalance());
     }
 
     /** Transfers money from account to recipient's account. */
@@ -85,7 +80,7 @@ public class Savings extends Account {
         recipient.setBalance(recipient.getBalance() + amount);
         this.withdrawLimit -= 1;
 
-        System.out.printf("Process Success: Current Balance = %.2f\n", this.getBalance());
+        System.out.println("Process Success: Current Balance = " + this.getBalance());
     }
 
     /** Collects a positive double within the account's balance. */

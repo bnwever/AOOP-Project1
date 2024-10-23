@@ -54,7 +54,7 @@ public class Checking extends Account {
     public void deposit() {
         double amount = collectAmount();
         this.setBalance(this.getBalance() + amount);
-        System.out.printf("Process Success: Current Balance = %.2f%n", this.getBalance());
+        System.out.println("Process Success: Current Balance = " + this.getBalance());
     }
 
     /**
@@ -70,11 +70,11 @@ public class Checking extends Account {
             this.setBalance(this.getBalance() - amount);
 
             if (this.getBalance() < 0) {
-                System.out.printf("Overdraft Fee added: %.2f%n", this.overDraftFee);
+                System.out.println("Overdraft Fee added: " + this.overDraftFee);
                 this.setBalance(this.getBalance() - this.overDraftFee);
             }
 
-            System.out.printf("Process Success: Current Balance = %.2f%n", this.getBalance());
+            System.out.println("Process Success: Current Balance = " + this.getBalance());
         } else {
             System.out.println("Insufficient funds, including overdraft consideration.");
         }
@@ -88,7 +88,7 @@ public class Checking extends Account {
         this.setBalance(this.getBalance() - amount);
         recipient.setBalance(recipient.getBalance() + amount);
 
-        System.out.printf("Process Success: Current Balance = %.2f%n", this.getBalance());
+        System.out.println("Process Success: Current Balance = " + this.getBalance());
     }
 
     /** Collects a positive double within the account's balance. */

@@ -231,7 +231,6 @@ public class UserInteractions {
                                "OR 'Exit' to end the program");
 
             switch (promptUser()) {
-
                 // Prints Customer Information
                 case "1":
                     printCustomerInfo(customerIn);
@@ -355,8 +354,8 @@ public class UserInteractions {
         Savings userSavings = new Savings(Integer.parseInt(columns[8]), Double.parseDouble(columns[9]));
         User.setAccount(userSavings, 1);
     
-        // Create and set Credit account: Credit(CreditID, CreditBalance)
-        Credit userCredit = new Credit(Integer.parseInt(columns[10]), Double.parseDouble(columns[11]));
+        // Create and set Credit account: Credit(CreditID, CreditMax, CreditBalance)
+        Credit userCredit = new Credit(Integer.parseInt(columns[10]), Double.parseDouble(columns[11]), Double.parseDouble(columns[12]));
         User.setAccount(userCredit, 2);
     
         return User;

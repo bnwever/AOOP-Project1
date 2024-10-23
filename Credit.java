@@ -11,47 +11,43 @@ import java.util.Scanner;
 public class Credit extends Account {
     private double creditLimit;
 
-    public Credit(int accountIDIn, double balanceIn){
+    // Use a single Scanner instance for user input throughout the class.
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public Credit(int accountIDIn, double creditMaxIn, double balanceIn){
         super(accountIDIn, balanceIn);
+        this.creditLimit = creditMaxIn;
     }
 
     /**
-     * Collects a positive double from user that does not exceed the maximumBalance.
+     * Collects a positive double from user.
      * 
-     * @return amount: the double collected.
+     * @return amount: the double collected
      */
     @Override
     public double collectAmount() {
-        Scanner scanner = null;
-        double amount = 0; 
-    
-        try {
-            scanner = new Scanner(System.in);
-            
-            while (true) {
-                System.out.print("Enter an amount:\n$ ");
-    
-                // Check if input is double
-                if (scanner.hasNextDouble()) {
-                    amount = scanner.nextDouble();
-                    System.out.println(amount); // TO DELETE: for debugging
-                } else {
-                    System.out.println("Invalid input. Input was not a double.");
-                }
+        double amount = 0;
 
-                // Check if input is also positive
-                if (amount < 0) {
+        while (true) {
+            System.out.print("Enter an amount:\n$ ");
+
+            // Check if input is double
+            if (scanner.hasNextDouble()) {
+                amount = scanner.nextDouble();
+                
+                // Check if input is positive
+                if (amount >= 0) {
+                    break;
+                } else {
                     System.out.println("Invalid input. Input was not positive or zero.");
-                } else break;
+                }
+            } else {
+                System.out.println("Invalid input. Input was not a double.");
+                scanner.next(); // Clear invalid input
             }
-        } catch (Exception e) {
-            System.out.println("Error");
-        } finally {
-            scanner.close(); 
         }
-        
-        return amount; 
-    } 
+        return amount;
+    }
 
     /** Adds amount inputed to balance. */
     @Override
@@ -69,14 +65,14 @@ public class Credit extends Account {
         }
 
         this.setBalance(this.getBalance() + amount);
-        System.out.printf("Process Success: Currente Balance = %.2f\n");
+        System.out.println("Process Success: Currente Balance = " + this.getBalance());
     }
 
     /** Removes amount inputed to balance. */
     @Override
     public void withdraw() {
         this.setBalance(this.getBalance() - amountWithinBalance());
-        System.out.printf("Process Success: Current Balance = %.2f\n", this.getBalance());
+        System.out.println("Process Success: Current Balance = " + this.getBalance());
     }
 
     /** Transfers money from account to recipient's account. */
@@ -87,7 +83,7 @@ public class Credit extends Account {
         this.setBalance(this.getBalance() - amount);
         recipient.setBalance(recipient.getBalance() + amount);
 
-        System.out.printf("Process Success: Current Balance = %.2f\n", this.getBalance());
+        System.out.println("Process Success: Current Balance = " + this.getBalance());
     }
 
     /** Collects a positive double within the account's balance. */
@@ -98,7 +94,7 @@ public class Credit extends Account {
         while (true) {
             amount = collectAmount();
 
-            if (this.getBalance() - amount >= this.creditLimit) {
+            if (this.getBalance() - amount >= -this.creditLimit) {
                 break;
             } else {
                 System.out.println("Invalid input. Amount exceeds credit limit.");

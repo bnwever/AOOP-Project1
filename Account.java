@@ -13,7 +13,7 @@ abstract class Account {
     private int accountID;
 
     /** Current Balance of the account. */
-    private double balance;
+    private double balance = 0;
 
     // Constructors
     public Account(){}
