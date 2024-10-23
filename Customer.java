@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * The Customer class represents a bank customer who can own multiple accounts.
  * It allows opening, adding, and removing accounts.
@@ -9,52 +6,33 @@ import java.util.List;
  */
 public class Customer {
     private int customerID;
-    private List<Account> accounts;
+    private Account accounts[];
     private Person individual;
 
     // Constructors
-    /** No paramameters constructor */
-    public Customer() {
-        this.accounts = new ArrayList<>();
+    /** No param constructor */
+    public Customer () {
+        this.accounts = new Account[3];
     }
 
     /**
      * Constructs a Customer with a specified customer ID.
      * 
-     * @param customerIDIn the unique ID of the customer.
+     * @param customerIDIn the unique ID of the customer
      */
     public Customer(int customerIDIn) {
         this.customerID = customerIDIn;
-        this.accounts = new ArrayList<>();
+        this.accounts = new Account[3];
     }
 
     // Methods
     /** 
      * Returns the type of a class as a string.
      *  
-     * @param index The index of the account
-     * @return a string of the account type, or "Invalid account index" if index is out of bounds.
+     * @return a string of the account type
     */
     public String getAccountType(int index) {
-        if (index >= 0 && index < accounts.size() && accounts.get(index) != null) {
-            return accounts.get(index).getClass().getSimpleName();
-        }
-        return "Invalid account index";
-    }
-
-    /**
-     * Finds an account by its ID.
-     * 
-     * @param accountID The ID of the account to find.
-     * @return The account with the specified ID, or null if not found.
-     */
-    public Account findAccountByID(int accountID) {
-        for (Account account : accounts) {
-            if (account.getAccountID() == accountID) {
-                return account;
-            }
-        }
-        return null;
+        return accounts[index].getClass().getSimpleName();
     }
 
     // Getters
@@ -64,17 +42,14 @@ public class Customer {
     }
     
     /** 
-     * Retrieves the account at the specified index from the accounts list.
+     * Retrieves the account at the specified index from the accounts array.
      * 
-     * @param accountIndex the index of the desired account.
+     * @param accountIndex the index of the desired account in the accounts array.
      * 
-     * @return the account, or null if the index is invalid.
+     * @return the checking account attribute. 
      */
     public Account getAccount(int accountIndex) {
-        if (accountIndex >= 0 && accountIndex < accounts.size()) {
-            return accounts.get(accountIndex);
-        }
-        return null;
+        return this.accounts[accountIndex];
     }
 
     /** @return the person attribute. */
@@ -86,56 +61,28 @@ public class Customer {
     /**
      * Sets customerIDIn ID to customerID.
      * 
-     * @param customerIDIn the customer ID to set.
+     * @param customerIDIn
      */
     public void setCustomerID(int customerIDIn) {
         this.customerID = customerIDIn;
     }
 
     /**
+     * Sets the account at specific index in the account array.
+     * 
+     * @param accountIn The account object being set.
+     * @param accountIndex The index the account is being set to in the array.
+     */
+    public void setAccount(Account accountIn, int accountIndex) {
+        this.accounts[accountIndex] = accountIn;
+    }
+
+    /**
      * Sets the person attribute.
      * 
-     * @param individualIn the person to set.
+     * @param individualIn
      */
-    public void setPerson(Person individualIn) {
+    public void setPerson(Person individualIn){
         this.individual = individualIn;
-    }
-
-    // Account management
-    /**
-     * Adds an account to the accounts list.
-     * 
-     * @param accountIn The account object being added.
-     */
-    public void addAccount(Account accountIn) {
-        accounts.add(accountIn);
-    }
-
-    /**
-     * Removes an account by its ID.
-     * 
-     * @param accountID The ID of the account to be removed.
-     * @return true if the account was removed successfully, false if not found.
-     */
-    public boolean removeAccountByID(int accountID) {
-        Account accountToRemove = findAccountByID(accountID);
-        if (accountToRemove != null) {
-            accounts.remove(accountToRemove);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Retrieves the balance of the account at the specified index.
-     * 
-     * @param index The index of the account.
-     * @return The balance of the account, or -1 if the index is invalid.
-     */
-    public double getAccountBalance(int index) {
-        if (index >= 0 && index < accounts.size() && accounts.get(index) != null) {
-            return accounts.get(index).getBalance();
-        }
-        return -1;
     }
 }

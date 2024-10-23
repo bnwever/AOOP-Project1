@@ -1,6 +1,4 @@
 /**
- * The RunBank class handles the interaction between the user and the program.
- * It also displays the starting and login menu.
  * 
  * @author Jesus Ordaz and Blaine Wever
  */
@@ -20,14 +18,15 @@ public class RunBank {
         UserInteractions.isManager();
 
         // If User is Bank Manager
-        if (UserInteractions.isBankManager) {
+        // Breaks loop/ends program when user enters "exit"
+        while (UserInteractions.isBankManager) {
             UserInteractions.findCustomer();
-
-        // If User is not Bank Manager
-        } else {
-           Customer user = UserInteractions.customerLogIn();
-
-           UserInteractions.customerFunctions(user);
         }
+
+        // Customer logIn (not Bank Manager)
+        Customer user = UserInteractions.customerLogIn();
+
+        // Gives Menu to check accounts, deposity, withdraw, or transfer money
+        UserInteractions.customerFunctions(user);
     }
 }

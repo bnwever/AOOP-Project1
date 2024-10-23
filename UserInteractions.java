@@ -33,9 +33,6 @@ public class UserInteractions {
 
     // For a shared scanner
     private static final Scanner scanner = new Scanner(System.in);
-  
-    private static Transaction_Log transactionLog = new Transaction_Log();
-
 
     // Register a shutdown hook to close the scanner when the program exits
     static {
@@ -89,14 +86,15 @@ public class UserInteractions {
     public static void findCustomer() {
         // (outer) Loop to ensure user inputs "a"/"A" or "b"/"B"
         Boolean customerFound = false;
-        while (!customerFound) {
-            Customer searchedCustomer = new Customer(); // Class we're going to put our found customer in.
-            System.out.println("--------------------------------------------------------------\n" +
+        Customer searchedCustomer = new Customer(); // Class we're going to put our found customer in.
+        System.out.println("--------------------------------------------------------------\n" +
                                "Enter in the option you'd like to choose...\n" +
-                               "A. Find customer by ID\n" +
-                               "B. Find customer by Name");
+                               "A. Inquire customer by ID\n" +
+                               "B. Inquire customer by Name\n" +
+                               "'Exit' to exit program");
 
-            // Determine if user wants to find account based on ID or Name
+        // Determine if user wants to find account based on ID or Name
+        while (!customerFound) {
             switch (promptUser()) {
 
                 // Finds customer based on ID.
@@ -105,8 +103,8 @@ public class UserInteractions {
                     // (inner) Loop until a customer is found.
                     while (true) {
                         System.out.println("--------------------------------------------------------------\n" +
-                                       "Please enter the ID of the account.");
-                        
+                                           "Please enter the ID of the account.");
+                            
                         // Searches for customer and creates Customer Class based on ID inputed
                         searchedCustomer = createCustomer(Integer.parseInt(promptUser()), null, null, null);
                         if (searchedCustomer == null) { // checkingUser is null if customer isn't found.
@@ -117,40 +115,39 @@ public class UserInteractions {
                         }
                     }
                     break; // Breaks switch case
-                
+                    
                 // Finds customer based on Name.
-                case "B":
-                case "b":
-                    // (inner) Loop until a customer is found.
-                    while (true) {
-                        // Asks and recieves first and last name of desired customer.
-                        System.out.println("--------------------------------------------------------------\n" +
-                                           "Please enter the Name of the account.");
-                        System.out.println("First name:");
-                        String firstName = promptUser();
-                        System.out.println("Last name:");
-                        String lastName = promptUser();
+                    case "B":
+                    case "b":
+                        // (inner) Loop until a customer is found.
+                        while (true) {
+                            // Asks and recieves first and last name of desired customer.
+                            System.out.println("--------------------------------------------------------------\n" +
+                                            "Please enter the Name of the account.");
+                            System.out.println("First name:");
+                            String firstName = promptUser();
+                            System.out.println("Last name:");
+                            String lastName = promptUser();
 
-                        // Searches for customer and creates Customer class based on Names inputed
-                        searchedCustomer = createCustomer(null, firstName, lastName, null);
-                        if (searchedCustomer == null) { // checkingUser is null if customer isn't found.
-                            System.out.println("Customer name was not found.");
-                        } else {
-                            customerFound = true; // Keeps outer loop from running again
-                            break; // Breaks inner loop
+                            // Searches for customer and creates Customer class based on Names inputed
+                            searchedCustomer = createCustomer(null, firstName, lastName, null);
+                            if (searchedCustomer == null) { // checkingUser is null if customer isn't found.
+                                System.out.println("Customer name was not found.");
+                            } else {
+                                customerFound = true; // Keeps outer loop from running again
+                                break; // Breaks inner loop
+                            }
                         }
-                    }
-                    break; // Breaks switch case
+                        break; // Breaks switch case
 
-                // Invalid Input case. Outer loop keeps running
-                default:
-                    System.out.println("Invalid Input.");
-                    break; 
+                    // Invalid Input case. Outer loop keeps running
+                    default:
+                        System.out.println("Invalid Input.");
+                        break; 
+                }
             }
-            
-            // Prints out customer's information.
-            printCustomerInfo(searchedCustomer);
-        }
+        // Prints out customer's information.
+        printCustomerInfo(searchedCustomer);
     }
 
     /**
@@ -165,45 +162,62 @@ public class UserInteractions {
                            "B. By Name");
 
         Customer User = new Customer();
-        switch (promptUser()) {
-            case "A":
-            case "a":
-            while (true) {
-                System.out.println("--------------------------------------------------------------\n" +
-                               "Please enter the ID of the account.");
-                User = createCustomer(Integer.parseInt(promptUser()), null, null, null);
-                if (User != null) { // checkingUser is null if customer isn't found.
-                    break;
-                } else {
-                    System.out.println("Customer ID was not found.");
+        Boolean signedIn = false;
+        while (!signedIn) {
+            switch (promptUser()) {
+                case "A":
+                case "a":
+                    signedIn = true;
+                    while (true) {
+                        System.out.println("--------------------------------------------------------------\n" +
+                                   "Please enter the ID of the account.");
+                        User = createCustomer(Integer.parseInt(promptUser()), null, null, null);
+                        
+                        if (User != null) { // checkingUser is null if customer isn't found.
+                            break;
+                        } else {
+                        System.out.println("Customer ID was not found.");
+                        }
                 }
-            }
-                break;
-            
-            case "B":
-            case "b":
-            while (true) {
-                System.out.println("--------------------------------------------------------------\n" +
-                                   "Please enter the Name of the account.");
-                System.out.println("First name:");
-                String firstName = promptUser();
-                System.out.println("Last name:");
-                String lastName = promptUser();
-
-                User = createCustomer(null, firstName, lastName, null);
-                if (User != null) { // checkingUser is null if customer isn't found.
                     break;
-                } else {
-                    System.out.println("Customer name was not found.");
+                
+                case "B":
+                case "b":
+                signedIn = true;
+                while (true) {
+                    System.out.println("--------------------------------------------------------------\n" +
+                                       "Please enter the Name of the account.");
+                    System.out.println("First name:");
+                    String firstName = promptUser();
+                    System.out.println("Last name:");
+                    String lastName = promptUser();
+    
+                    User = createCustomer(null, firstName, lastName, null);
+                    if (User != null) { // checkingUser is null if customer isn't found.
+                        break;
+                    } else {
+                        System.out.println("Customer name was not found.");
+                    }
                 }
+                    break;
+                default:
+                    System.out.println("Invalid Input.");
             }
-                break;
         }
+        
         return User;
     }
 
     /**
-     * This function 
+     * This function displays a function menu for the customer to use.
+     * After prompting user -
+     * input "1" - Prints the customers information and their accounts
+     * input "2" - Deposits money into one of their acounts
+     * input "3" - Withdraws money from one of their accounts
+     * input "4" - transfers money from their account and deposits into another account
+     *             (the user will be able to enter a recipient account id)
+     * 
+     * @param customerIn the customer object that stores the user's information
      */
     public static void customerFunctions(Customer customerIn) {
         while (true) {
@@ -214,7 +228,6 @@ public class UserInteractions {
                                "2 - Deposit\n" +
                                "3 - Withdraw\n" +
                                "4 - Transfer\n" +
-                               "5 - View Transaction Log\n" +  // Added option to view the log
                                "OR 'Exit' to end the program");
 
             switch (promptUser()) {
@@ -225,68 +238,37 @@ public class UserInteractions {
                     break;
 
                 // Prompts user to pick account. Then 
-               case "2":
-                    int depositIndex = printChooseAccount("Deposit");
-                    customerIn.getAccount(depositIndex).deposit();
-                    transactionLog.logTransaction("Deposit made to Account #" + customerIn.getAccount(depositIndex).getAccountID());
-    
-                    // Save the changes to the CSV file
-                   
+                case "2":
+                    int checkingIndex = printChooseAccount("Deposit");
+                    customerIn.getAccount(checkingIndex).deposit();
                     break;
 
-            // Withdraw from an account
                 case "3":
-                    int withdrawIndex = printChooseAccount("Withdraw");
-                    customerIn.getAccount(withdrawIndex).withdraw();
-                    transactionLog.logTransaction("Withdrawal from Account #" + customerIn.getAccount(withdrawIndex).getAccountID());
-
-                    // Save the changes to the CSV file
+                    int savingsIndex = printChooseAccount("Withdraw");
+                    customerIn.getAccount(savingsIndex).withdraw();
                     break;
 
                 case "4":
-                    int transferIndex = printChooseAccount("Transfer");
+                    int creditIndex = printChooseAccount("Transfer");
                     Customer foundAccount = new Customer();
                     while (true) {
                         System.out.println("--------------------------------------------------------------\n" +
                                            "Please insert the account number you wish to transfer money to.");
-                
+
                         Integer accountIDIn = Integer.parseInt(promptUser());
                         foundAccount = createCustomer(null, null, null, accountIDIn);
                         if (foundAccount != null) {
                             break;
                         }
                     }
-                
-                    customerIn.getAccount(transferIndex).transferMoney(foundAccount.getAccount(transferIndex));
-                    transactionLog.logTransaction("Transfer from Account #" + 
-                                                  customerIn.getAccount(transferIndex).getAccountID() + 
-                                                  " to Account #" + 
-                                                  foundAccount.getAccount(transferIndex).getAccountID());
-                
-                    // Save the changes to the CSV file
+                    
+                    customerIn.getAccount(creditIndex).transferMoney(foundAccount.getAccount(transferAccountIndex));
                     break;
-                  // View the transaction log
-                case "5":
-                    List<String> transactions = transactionLog.readLog();
-                    if (transactions.isEmpty()) {
-                        System.out.println("No transactions have been logged yet.");
-                    } else {
-                        System.out.println("Transaction Log:");
-                        for (String entry : transactions) {
-                            System.out.println(entry);
-                        }
-                    }
-                    break;
-
-                // Exit case
-                case "Exit":
-                    System.out.println("Exiting program. Goodbye!");
-                    return;
 
                 default:
                     System.out.println("Invalid Input.");
                     break;
-           }
+            }
         }
     }
 
@@ -314,28 +296,28 @@ public class UserInteractions {
     public static void isExit(String inputIn) {
         if (inputIn.equalsIgnoreCase("exit")) {
             System.out.println("Exiting program...");
-            System.exit(0);  // Ensure shutdown hook runs
+            System.exit(0);
         }
     }
 
     /** Prints Customer info. Customer, Person, and it's accounts. */
     public static void printCustomerInfo(Customer searchedCustomer) {
-        System.out.println("--------------------------------------------------------------\n");
+        System.out.println("--------------------------------------------------------------");
         System.out.println("Customer ID: " + searchedCustomer.getCustomerID());
-        System.out.println("Name: " + searchedCustomer.getPerson().getName());
-        System.out.println("Address: " + searchedCustomer.getPerson().getAddress());
+        System.out.println("\nName: " + searchedCustomer.getPerson().getName());
+        System.out.println("\nAddress: " + searchedCustomer.getPerson().getAddress() + "\n");
 
-        System.out.println(searchedCustomer.getAccountType(0) + " Account -");
-        System.out.println("\tID: " + searchedCustomer.getAccount(0).getAccountID());
-        System.out.println("\tBalance: " + searchedCustomer.getAccount(0).getBalance());
+        System.out.print(searchedCustomer.getAccountType(0) + " Account -");
+        System.out.println(" ID: " + searchedCustomer.getAccount(0).getAccountID());
+        System.out.println("\tBalance: $" + searchedCustomer.getAccount(0).getBalance() + "\n");
 
-        System.out.println(searchedCustomer.getAccountType(1) + " Account -");
-        System.out.println("\tID: " + searchedCustomer.getAccount(1).getAccountID());
-        System.out.println("\tBalance: " + searchedCustomer.getAccount(1).getBalance());
+        System.out.print(searchedCustomer.getAccountType(1) + " Account -");
+        System.out.println(" ID: " + searchedCustomer.getAccount(1).getAccountID());
+        System.out.println("\tBalance: $" + searchedCustomer.getAccount(1).getBalance() + "\n");
 
-        System.out.println(searchedCustomer.getAccountType(2) + " Account -");
-        System.out.println("\tID: " + searchedCustomer.getAccount(2).getAccountID());
-        System.out.println("\tBalance: " + searchedCustomer.getAccount(2).getBalance());
+        System.out.print(searchedCustomer.getAccountType(2) + " Account -");
+        System.out.println(" ID: " + searchedCustomer.getAccount(2).getAccountID());
+        System.out.println("\tBalance: $" + searchedCustomer.getAccount(2).getBalance() + "\n");
     }
 
     /**
@@ -359,28 +341,30 @@ public class UserInteractions {
         if (columns == null) return null; // Return null if the row (customer) wasn't found
     
     
-        Customer User = new Customer(); // Create Customer object
+        Customer User = new Customer(Integer.parseInt(columns[0])); // Create Customer object
     
         // Create and set a Person object for the user: Person(First Name, Last Name, Address)
-        Person individual = new Person(columns[1].trim() + columns[2].trim(), columns[4].trim());
+        Person individual = new Person(columns[1].trim() + " " + columns[2].trim(), columns[4].trim());
         User.setPerson(individual);
     
         // Create and set Checking account: Checking(CheckingID, CheckingBalance)
-        Checking userChecking = new Checking(Integer.parseInt(columns[6]), Integer.parseInt(columns[7]));
+        Checking userChecking = new Checking(Integer.parseInt(columns[6]), Double.parseDouble(columns[7]));
         User.setAccount(userChecking, 0);
     
         // Create and set Savings account: Savings(SavingsID, SavingsBalance)
-        Savings userSavings = new Savings(Integer.parseInt(columns[8]), Integer.parseInt(columns[9]));
+        Savings userSavings = new Savings(Integer.parseInt(columns[8]), Double.parseDouble(columns[9]));
         User.setAccount(userSavings, 1);
     
         // Create and set Credit account: Credit(CreditID, CreditBalance)
-        Credit userCredit = new Credit(Integer.parseInt(columns[10]), Integer.parseInt(columns[11]));
+        Credit userCredit = new Credit(Integer.parseInt(columns[10]), Double.parseDouble(columns[11]));
         User.setAccount(userCredit, 2);
     
         return User;
     }
 
     /**
+     * Finds a row(customer) from the BankUsers.csv file based on either customerID, First/Last Name, or account ID.
+     * Creates an array of strings containing the contents in that row and returns it.
      * 
      * @param customerIDIn
      * @param firstNameIn
@@ -390,15 +374,15 @@ public class UserInteractions {
      * @return columns: An array of strings holding the contents of a single row from BankUsers.csv
      */
     public static String[] findRow(Integer customerIDIn, String firstNameIn, String lastNameIn, Integer accountIDIn) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers"))) {
-            String line;
+        try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers.csv"))) {
+            String line = reader.readLine(); // Reads and skips header row
             while ((line = reader.readLine()) != null) {
-                String[] columns = line.split(",");
+                String[] columns = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
     
                 // Check by ID if idIn is provided
                 if (customerIDIn != null) {
                     int number = Integer.parseInt(columns[0].trim());
-                    if (columns.length > 0 && number == customerIDIn) {
+                    if (number == customerIDIn) {
                         return columns;
                     }
                 }
@@ -407,7 +391,7 @@ public class UserInteractions {
                 if (firstNameIn != null && lastNameIn != null) {
                     String firstName = columns[1].trim();
                     String lastName = columns[2].trim();
-                    if (columns.length > 0 && firstName.equals(firstNameIn) && lastName.equals(lastNameIn)) {
+                    if (firstName.equals(firstNameIn) && lastName.equals(lastNameIn)) {
                         return columns;
                     }
                 }
@@ -437,55 +421,7 @@ public class UserInteractions {
         }
         return null; // Return null if no matching row is found
     }
-        /**
-     * Updates the customer information in the CSV file with the provided updated customer data.
-     * 
-     * This method reads the existing customer data from the Bankusers csv file, checks if the customer 
-     * specified by the updatedCustomers ID exists, and replaces that entry with the new data 
-     * from the updatedCustomer object. If the customer is not found, the file remains unchanged.
-     * 
-     * @param updatedCustomer The Customer object containing updated information to be saved 
-     *                       in the BankUserscsv file. The ID of this customer will be used to identify 
-     *                       the corresponding entry in the file.
-     * 
-     * @throws IOException If there is an error reading from or writing to the CSV file.
-     */
-    private static void updateBanksUsers(Customer updatedCustomer) {
-        List<String> fileContent = new ArrayList<>();
-        String line;
-    
-        // Read the CSV file line by line and store content in a list
-        try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers.csv"))) {
-            while ((line = reader.readLine()) != null) {
-                // Split the line into columns
-                String[] columns = line.split(",");
-                
-                // Check if this line is for the customer that was updated using their ID
-                int customerID = Integer.parseInt(columns[0].trim());
-    
-                if (customerID == updatedCustomer.getId()) {
-                    // Update this line with the new customer data
-                    // still needs to be finished
-                    //fileContent.add()
-                } else {
-                    // Keep the line as is for other customers
-                    fileContent.add(line);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading customer data from file: " + e.getMessage());
-            return;
-        }
-    
-        // Write the updated content back to the CSV file
-        try (FileWriter writer = new FileWriter("BankUsers.csv")) {
-            for (String contentLine : fileContent) {
-                writer.write(contentLine + "\n");
-            }
-        } catch (IOException e) {
-            System.out.println("Error saving updated customer data to file: " + e.getMessage());
-        }
-    }
+
     /**
      * Prompts the user to chose which account they'd like to chose.
      * Returns the index the account is found in Customer's account array.
@@ -516,6 +452,56 @@ public class UserInteractions {
             } else {
                 System.out.println("Invalid Input");
             }
+        }
+    }
+
+    /**
+     * Updates the customer information in the CSV file with the provided updated customer data.
+     * 
+     * This method reads the existing customer data from the Bankusers csv file, checks if the customer 
+     * specified by the updatedCustomers ID exists, and replaces that entry with the new data 
+     * from the updatedCustomer object. If the customer is not found, the file remains unchanged.
+     * 
+     * @param updatedCustomer The Customer object containing updated information to be saved 
+     *                       in the BankUserscsv file. The ID of this customer will be used to identify 
+     *                       the corresponding entry in the file.
+     * 
+     * @throws IOException If there is an error reading from or writing to the CSV file.
+     */
+    private static void updateBanksUsers(Customer updatedCustomer) {
+        List<String> fileContent = new ArrayList<>();
+        String line;
+    
+        // Read the CSV file line by line and store content in a list
+        try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers.csv"))) {
+            while ((line = reader.readLine()) != null) {
+                // Split the line into columns
+                String[] columns = line.split(",");
+                
+                // Check if this line is for the customer that was updated using their ID
+                int customerID = Integer.parseInt(columns[0].trim());
+    
+                if (customerID == updatedCustomer.getCustomerID()) {
+                    // Update this line with the new customer data
+                    // still needs to be finished
+                    //fileContent.add()
+                } else {
+                    // Keep the line as is for other customers
+                    fileContent.add(line);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading customer data from file: " + e.getMessage());
+            return;
+        }
+    
+        // Write the updated content back to the CSV file
+        try (FileWriter writer = new FileWriter("BankUsers.csv")) {
+            for (String contentLine : fileContent) {
+                writer.write(contentLine + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving updated customer data to file: " + e.getMessage());
         }
     }
 }
