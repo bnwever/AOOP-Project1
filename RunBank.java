@@ -17,7 +17,7 @@ public class RunBank {
         // Asks user if they are a Bank Manager
         UserInteractions.isManager();
 
-        // Create a TransactionLog with a capacity of 100 (you can adjust this value)
+        // Create a TransactionLog with a capacity of 100, can be adjusted
         TransactionLog transactionLog = new TransactionLog(100);
 
         // If User is Bank Manager
