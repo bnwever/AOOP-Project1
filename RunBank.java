@@ -12,7 +12,7 @@ public class RunBank {
     public static void main(String[] args) {
 
         // Print Start Screen
-        UserInteractions.startScreen();
+        startScreen();
 
         // Asks user if they are a Bank Manager
         UserInteractions.isManager();
@@ -29,5 +29,12 @@ public class RunBank {
         // Gives Menu to check accounts, deposit, withdraw, or transfer money
         // Pass the user and transactionLog to customerFunctions
         UserInteractions.customerFunctions(user);
+    }
+
+    /** Displays the start/welcome screen for the program */
+    private static void startScreen() {
+        System.out.println("--------------------------------------------------------------\n" +
+                           "Welcome to El Paso Miners Bank!" +
+                           "At any time, type 'exit' to leave the program.");
     }
 }

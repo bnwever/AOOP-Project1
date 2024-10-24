@@ -291,7 +291,7 @@ public class UserInteractions {
      * 
      * @return input
      */
-    public static String promptUser() {
+    private static String promptUser() {
         System.out.print("> ");
         String input = scanner.nextLine();
         isExit(input); // Exits program if input is "exit" or "Exit"
@@ -328,7 +328,7 @@ public class UserInteractions {
      * 
      * @param inputIn: The input
      */
-    public static void isExit(String inputIn) {
+    private static void isExit(String inputIn) {
         if (inputIn.equalsIgnoreCase("exit")) {
             System.out.println("Exiting program...");
             System.exit(0);
@@ -336,7 +336,7 @@ public class UserInteractions {
     }
 
     /** Prints Customer info. Customer, Person, and it's accounts. */
-    public static void printCustomerInfo(Customer searchedCustomer) {
+    private static void printCustomerInfo(Customer searchedCustomer) {
         System.out.println("--------------------------------------------------------------");
         System.out.println("Customer ID: " + searchedCustomer.getCustomerID());
         System.out.println("\nName: " + searchedCustomer.getPerson().getName());
@@ -415,7 +415,7 @@ public class UserInteractions {
      * @return columns: An array of strings holding the contents of a single row
      *         from BankUsers.csv
      */
-    public static String[] findRow(Integer customerIDIn, String firstNameIn, String lastNameIn, Integer accountIDIn) {
+    private static String[] findRow(Integer customerIDIn, String firstNameIn, String lastNameIn, Integer accountIDIn) {
         try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers.csv"))) {
             String line = reader.readLine(); // Reads and skips header row
             while ((line = reader.readLine()) != null) {

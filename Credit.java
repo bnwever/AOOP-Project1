@@ -57,7 +57,10 @@ public class Credit extends Account {
         return amount;
     }
 
-    /** Adds amount inputed to balance. */
+    /** 
+     * Adds amount inputed to balance
+     * Logs the transaction in Transactions.txt
+     */
     @Override
     public void deposit() {
         double amount;
@@ -75,19 +78,24 @@ public class Credit extends Account {
         this.setBalance(this.getBalance() + amount);
         System.out.println("Process Success: Current Balance = $" + this.getBalance());
 
+        // Log the deposity transaction
         String transactionDetails = "Deposited $" + amount + " into account ID: " + this.getAccountID();
         logTransaction(transactionDetails);
 
         updateBalanceInCSV(null, null, null, this.getAccountID(), this.getBalance());
     }
 
-    /** Removes amount inputed to balance. */
+    /** 
+     * Removes amount inputed to balance.
+     * Logs the transaction in Transactions.txt
+     */
     @Override
     public void withdraw() {
         double amount = amountWithinBalance();
 
         this.setBalance(this.getBalance() - amount);
         System.out.println("Process Success: Current Balance = " + this.getBalance());
+
         // Log the withdrawal transaction
         String transactionDetails = "Withdrew $" + amount + " from account ID: " + this.getAccountID();
         logTransaction(transactionDetails);
@@ -95,7 +103,10 @@ public class Credit extends Account {
         updateBalanceInCSV(null, null, null, this.getAccountID(), this.getBalance());
     }
 
-    /** Transfers money from account to recipient's account. */
+    /** 
+     * Transfers money from account to recipient's account.
+     * Logs the transaction in Transactions.txt
+     */
     @Override
     public void transferMoney(Account recipient) {
         double amount = amountWithinBalance();
@@ -107,7 +118,7 @@ public class Credit extends Account {
 
         // Log the transfer transaction
         String transactionDetails = "Transferred $" + amount + " from account ID: " + this.getAccountID() +
-                " to account ID: " + recipient.getAccountID();
+                                    " to account ID: " + recipient.getAccountID();
         logTransaction(transactionDetails);
 
         updateBalanceInCSV(null, null, null, this.getAccountID(), this.getBalance());
