@@ -219,7 +219,7 @@ public class UserInteractions {
      * 
      * @param customerIn the customer object that stores the user's information
      */
-    public static void customerFunctions(Customer customerIn, TransactionLog transactionLog) {
+    public static void customerFunctions(Customer customerIn) {
         while (true) {
             System.out.println("--------------------------------------------------------------\n" +
                     "Please insert the number for the function you'd like to use.\n" +
@@ -240,33 +240,13 @@ public class UserInteractions {
                 // Prompts user to pick account for Deposit
                 case "2":
                     int checkingIndex = printChooseAccount("Deposit");
-                    Account depositAccount = customerIn.getAccount(checkingIndex);
-                    
-                    
-                    double depositAmount = promptForAmount(depositAccount);
-                    
-                    
-                    depositAccount.deposit();
-                    
-                    // Log the transaction
-                    logTransactionDetails(transactionLog, "Deposit", depositAmount, depositAccount, null);
-                    
+                    customerIn.getAccount(checkingIndex).deposit();
                     break;
     
                 // Prompts user to pick account for Withdrawal
                 case "3":
                     int savingsIndex = printChooseAccount("Withdraw");
-                    Account withdrawalAccount = customerIn.getAccount(savingsIndex);
-                    
-                    
-                    double withdrawalAmount = promptForAmount(withdrawalAccount);
-                    
-                    
-                    withdrawalAccount.withdraw();
-                    
-                    // Log the transaction
-                    logTransactionDetails(transactionLog, "Withdrawal", withdrawalAmount, withdrawalAccount, null);
-                    
+                    customerIn.getAccount(savingsIndex).deposit();
                     break;
     
                 // Prompts user to pick account for Transfer
@@ -285,18 +265,8 @@ public class UserInteractions {
                             break;
                         }
                     }
-    
-                    Account targetAccount = foundAccount.getAccount(transferAccountIndex);
                     
-                    
-                    double transferAmount = promptForAmount(sourceAccount);
-                    
-                    
-                    sourceAccount.transferMoney(targetAccount);
-                    
-                    // Log the transaction
-                    logTransactionDetails(transactionLog, "Transfer", transferAmount, sourceAccount, targetAccount);
-                    
+                    customerIn.getAccount(creditIndex).transferMoney(sourceAccount);
                     break;
     
                 default:
@@ -332,7 +302,6 @@ public class UserInteractions {
             try {
                 double amount = account.collectAmount();
                 
-                
                 if (amount < 0) {
                     System.out.println("Amount must be positive. Please try again.");
                     continue;
@@ -344,7 +313,6 @@ public class UserInteractions {
             }
         }
     }
-
 
     /**
      * Ends the program if the input is "exit" or "Exit"
@@ -397,7 +365,6 @@ public class UserInteractions {
         String[] columns = findRow(customerIDIn, firstNameIn, lastNameIn, accountIDIn);
 
         if (columns == null) return null; // Return null if the row (customer) wasn't found
-    
     
         Customer User = new Customer(Integer.parseInt(columns[0])); // Create Customer object
     
@@ -512,38 +479,7 @@ public class UserInteractions {
             }
         }
     }
-        /**
-     * Logs a transaction to the TransactionLog.
-     *
-     * @param transactionLog The TransactionLog instance where the transaction will be recorded.
-     * @param type           The type of transaction (e.g., "Deposit", "Withdrawal", "Transfer").
-     * @param amount         The amount of the transaction.
-     * @param sourceAccount  The account from which the transaction originates.
-     * @param targetAccount  The target account for transfers (can be null if not applicable).
-     */
-    public static void logTransactionDetails(TransactionLog transactionLog, String type, double amount, Account sourceAccount, Account targetAccount) {
-        String logEntry;
-
-        switch (type) {
-            case "Deposit":
-                logEntry = String.format("Deposit of $%.2f to account %d.", amount, sourceAccount.getAccountID());
-                break;
-            case "Withdrawal":
-                logEntry = String.format("Withdrawal of $%.2f from account %d.", amount, sourceAccount.getAccountID());
-                break;
-            case "Transfer":
-                logEntry = String.format("Transfer of $%.2f from account %d to account %d.",
-                        amount, sourceAccount.getAccountID(), targetAccount.getAccountID());
-                break;
-            default:
-                logEntry = "Unknown transaction type.";
-                break;
-        }
-
-        // Log the transaction
-        transactionLog.logTransaction(logEntry);
-    }
-
+    
     /**
      * Updates the customer information in the CSV file with the provided updated customer data.
      * 

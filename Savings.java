@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
 /**
  * Concrete class representation of a savings account in a bank.
  * 
@@ -32,16 +34,18 @@ public class Savings extends Account {
             // Check if input is double
             if (scanner.hasNextDouble()) {
                 amount = scanner.nextDouble();
+                scanner.nextLine();
                 
                 // Check if input is positive
                 if (amount >= 0) {
                     break;
+
                 } else {
                     System.out.println("Invalid input. Input was not positive or zero.");
                 }
             } else {
                 System.out.println("Invalid input. Input was not a double.");
-                scanner.next(); // Clear invalid input
+                scanner.nextLine();
             }
         }
         return amount;
@@ -52,7 +56,10 @@ public class Savings extends Account {
     public void deposit() {
         double amount = collectAmount();
         this.setBalance(this.getBalance() + amount);
-        System.out.println("Process Success: Currente Balance = " + this.getBalance());
+        System.out.println("Process Success: Current Balance = $" + this.getBalance());
+
+        String transactionDetails = "Deposited" + amount + "into account - " + this.getAccountID();
+        logTransaction(transactionDetails);
     }
 
     /** 
@@ -99,5 +106,14 @@ public class Savings extends Account {
         }
 
         return amount;
+    }
+
+    private void logTransaction(String transactionDetails) {
+        try (FileWriter writer = new FileWriter("TransactionLog.txt", true)) {
+            System.out.println("write success");
+            writer.write(transactionDetails);
+        } catch (IOException e) {
+            System.out.println("log error");
+        }
     }
 }

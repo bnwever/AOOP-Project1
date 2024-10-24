@@ -17,9 +17,6 @@ public class RunBank {
         // Asks user if they are a Bank Manager
         UserInteractions.isManager();
 
-        // Create a TransactionLog with a capacity of 100, can be adjusted
-        TransactionLog transactionLog = new TransactionLog(100);
-
         // If User is Bank Manager
         // Breaks loop/ends program when user enters "exit"
         while (UserInteractions.isBankManager) {
@@ -31,6 +28,6 @@ public class RunBank {
 
         // Gives Menu to check accounts, deposit, withdraw, or transfer money
         // Pass the user and transactionLog to customerFunctions
-        UserInteractions.customerFunctions(user, transactionLog);
+        UserInteractions.customerFunctions(user);
     }
 }
