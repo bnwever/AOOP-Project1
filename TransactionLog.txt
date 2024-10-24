@@ -1,1 +1,4 @@
 Deposited100.0into account - 2009
+Deposited $100.0 into account ID: 1009
+Withdrew $100.0 from account ID: 1009
+Transferred $100.0 from account ID: 1009 to account ID: 1009

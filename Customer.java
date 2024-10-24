@@ -2,7 +2,7 @@
  * The Customer class represents a bank customer who can own multiple accounts.
  * It allows opening, adding, and removing accounts.
  * 
- * @author Jesus Ordaz  
+ * @author Jesus Ordaz
  */
 public class Customer {
     private int customerID;
@@ -11,7 +11,7 @@ public class Customer {
 
     // Constructors
     /** No param constructor */
-    public Customer () {
+    public Customer() {
         this.accounts = new Account[3];
     }
 
@@ -26,11 +26,11 @@ public class Customer {
     }
 
     // Methods
-    /** 
+    /**
      * Returns the type of a class as a string.
-     *  
+     * 
      * @return a string of the account type
-    */
+     */
     public String getAccountType(int index) {
         return accounts[index].getClass().getSimpleName();
     }
@@ -40,13 +40,13 @@ public class Customer {
     public int getCustomerID() {
         return this.customerID;
     }
-    
-    /** 
+
+    /**
      * Retrieves the account at the specified index from the accounts array.
      * 
      * @param accountIndex the index of the desired account in the accounts array.
      * 
-     * @return the checking account attribute. 
+     * @return the checking account attribute.
      */
     public Account getAccount(int accountIndex) {
         return this.accounts[accountIndex];
@@ -70,7 +70,7 @@ public class Customer {
     /**
      * Sets the account at specific index in the account array.
      * 
-     * @param accountIn The account object being set.
+     * @param accountIn    The account object being set.
      * @param accountIndex The index the account is being set to in the array.
      */
     public void setAccount(Account accountIn, int accountIndex) {
@@ -82,7 +82,8 @@ public class Customer {
      * 
      * @param individualIn
      */
-    public void setPerson(Person individualIn){
+    public void setPerson(Person individualIn) {
         this.individual = individualIn;
     }
+
 }
