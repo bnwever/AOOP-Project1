@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Concrete class representation of a savings account in a bank.
@@ -101,6 +103,14 @@ public class Credit extends Account {
             }
         }
 
-        return amount;
+        return amount;   
     }
+    /** logs the transaction details into TransactionLog.txt */
+    private void logTransaction(String transactionDetails) {
+        try (FileWriter writer = new FileWriter("TransactionLog.txt", true)) {
+            writer.write("\n" + transactionDetails);
+        } catch (IOException e) {
+            System.out.println("log error");
+        }
+    }   
 }
