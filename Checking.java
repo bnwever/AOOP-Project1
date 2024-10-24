@@ -113,12 +113,13 @@ public class Checking extends Account {
 
         return amount;
     }
-        /** logs the transaction details into TransactionLog.txt */
-        private void logTransaction(String transactionDetails) {
-            try (FileWriter writer = new FileWriter("TransactionLog.txt", true)) {
-                writer.write("\n" + transactionDetails);
-            } catch (IOException e) {
-                System.out.println("log error");
-            }
+    
+    /** logs the transaction details into TransactionLog.txt */
+    private void logTransaction(String transactionDetails) {
+        try (FileWriter writer = new FileWriter("TransactionLog.txt", true)) {
+            writer.write("\n" + transactionDetails);
+        } catch (IOException e) {
+            System.out.println("log error");
         }
+    }
 }
