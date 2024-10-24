@@ -58,7 +58,7 @@ public class Savings extends Account {
         this.setBalance(this.getBalance() + amount);
         System.out.println("Process Success: Current Balance = $" + this.getBalance());
 
-        String transactionDetails = "Deposited" + amount + "into account - " + this.getAccountID();
+        String transactionDetails = "Deposited $" + amount + " into account ID: " + this.getAccountID();
         logTransaction(transactionDetails);
     }
 
@@ -108,10 +108,10 @@ public class Savings extends Account {
         return amount;
     }
 
+    /** logs the transaction details into TransactionLog.txt */
     private void logTransaction(String transactionDetails) {
         try (FileWriter writer = new FileWriter("TransactionLog.txt", true)) {
-            System.out.println("write success");
-            writer.write(transactionDetails);
+            writer.write("\n" + transactionDetails);
         } catch (IOException e) {
             System.out.println("log error");
         }
