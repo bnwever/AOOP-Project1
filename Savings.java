@@ -10,7 +10,7 @@ import java.io.IOException;
  * @author Blaine
  */
 public class Savings extends Account {
-    private int withdrawLimit = 6;
+    private int withdrawLimit = 3;
 
     // Use a single Scanner instance for user input throughout the class.
     private static final Scanner scanner = new Scanner(System.in);

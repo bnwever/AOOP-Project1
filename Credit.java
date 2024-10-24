@@ -16,7 +16,7 @@ public class Credit extends Account {
 
     public Credit(int accountIDIn, double creditMaxIn, double balanceIn){
         super(accountIDIn, balanceIn);
-        this.creditLimit = creditMaxIn;
+        this.creditLimit = -creditMaxIn;
     }
 
     /**
@@ -65,7 +65,7 @@ public class Credit extends Account {
         }
 
         this.setBalance(this.getBalance() + amount);
-        System.out.println("Process Success: Currente Balance = " + this.getBalance());
+        System.out.println("Process Success: Current Balance = $" + this.getBalance());
     }
 
     /** Removes amount inputed to balance. */
@@ -94,7 +94,7 @@ public class Credit extends Account {
         while (true) {
             amount = collectAmount();
 
-            if (this.getBalance() - amount >= -this.creditLimit) {
+            if (this.getBalance() - amount >= this.creditLimit) {
                 break;
             } else {
                 System.out.println("Invalid input. Amount exceeds credit limit.");

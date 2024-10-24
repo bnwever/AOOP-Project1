@@ -230,6 +230,7 @@ public class UserInteractions {
                     "4 - Transfer\n" +
                     "OR 'Exit' to end the program");
     
+            int accountIndex;
             switch (promptUser()) {
     
                 // Prints Customer Information
@@ -239,20 +240,20 @@ public class UserInteractions {
     
                 // Prompts user to pick account for Deposit
                 case "2":
-                    int checkingIndex = printChooseAccount("Deposit");
-                    customerIn.getAccount(checkingIndex).deposit();
+                    accountIndex = printChooseAccount("Deposit");
+                    customerIn.getAccount(accountIndex).deposit();
                     break;
     
                 // Prompts user to pick account for Withdrawal
                 case "3":
-                    int savingsIndex = printChooseAccount("Withdraw");
-                    customerIn.getAccount(savingsIndex).deposit();
+                    accountIndex = printChooseAccount("Withdraw");
+                    customerIn.getAccount(accountIndex).withdraw();
                     break;
     
                 // Prompts user to pick account for Transfer
                 case "4":
-                    int creditIndex = printChooseAccount("Transfer");
-                    Account sourceAccount = customerIn.getAccount(creditIndex);
+                    accountIndex = printChooseAccount("Transfer");
+                    Account sourceAccount = customerIn.getAccount(accountIndex);
                     
                     Customer foundAccount = new Customer();
                     while (true) {
@@ -264,9 +265,10 @@ public class UserInteractions {
                         if (foundAccount != null) {
                             break;
                         }
+                        System.out.println("Account not found.");
                     }
                     
-                    customerIn.getAccount(creditIndex).transferMoney(sourceAccount);
+                    customerIn.getAccount(accountIndex).transferMoney(sourceAccount);
                     break;
     
                 default:
