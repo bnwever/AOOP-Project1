@@ -42,13 +42,6 @@ public class UserInteractions {
     // -----------------------------------------------------------------------------------------------------------------------------------------------
     // Part 1 : Directly Called Functions by RunBank.java
 
-    /** Displays the start/welcome screen for the program */
-    public static void startScreen() {
-        System.out.println("--------------------------------------------------------------\n" +
-                           "Welcome to El Paso Miners Bank!" +
-                           "At any time, type 'exit' to leave the program.");
-    }
-
     /**
      * Asks user if they are a Bank Manager.
      * 
@@ -287,33 +280,11 @@ public class UserInteractions {
      * 
      * @return input
      */
-    public static String promptUser() {
+    private static String promptUser() {
         System.out.print("> ");
         String input = scanner.nextLine();
         isExit(input);  // Exits program if input is "exit" or "Exit"
         return input;
-    }
-    /**
-     * Prompts the user to enter a monetary amount using the collectAmount method of the Account.
-     *
-     * @param account The Account object to collect the amount for (using its collectAmount method).
-     * @return The valid amount entered by the user as a double.
-     */
-    public static double promptForAmount(Account account) {
-        while (true) {
-            try {
-                double amount = account.collectAmount();
-                
-                if (amount < 0) {
-                    System.out.println("Amount must be positive. Please try again.");
-                    continue;
-                }
-                
-                return amount;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
-            }
-        }
     }
 
     /**
@@ -321,7 +292,7 @@ public class UserInteractions {
      * 
      * @param inputIn: The input
      */
-    public static void isExit(String inputIn) {
+    private static void isExit(String inputIn) {
         if (inputIn.equalsIgnoreCase("exit")) {
             System.out.println("Exiting program...");
             System.exit(0);
@@ -329,7 +300,7 @@ public class UserInteractions {
     }
 
     /** Prints Customer info. Customer, Person, and it's accounts. */
-    public static void printCustomerInfo(Customer searchedCustomer) {
+    private static void printCustomerInfo(Customer searchedCustomer) {
         System.out.println("--------------------------------------------------------------");
         System.out.println("Customer ID: " + searchedCustomer.getCustomerID());
         System.out.println("\nName: " + searchedCustomer.getPerson().getName());
@@ -362,7 +333,7 @@ public class UserInteractions {
      * 
      * @return user: A newly created Customer Class
      */
-    public static Customer createCustomer(Integer customerIDIn, String firstNameIn, String lastNameIn, Integer accountIDIn) {
+    private static Customer createCustomer(Integer customerIDIn, String firstNameIn, String lastNameIn, Integer accountIDIn) {
          // Find the row based on either ID or Name
         String[] columns = findRow(customerIDIn, firstNameIn, lastNameIn, accountIDIn);
 
@@ -400,7 +371,7 @@ public class UserInteractions {
      * 
      * @return columns: An array of strings holding the contents of a single row from BankUsers.csv
      */
-    public static String[] findRow(Integer customerIDIn, String firstNameIn, String lastNameIn, Integer accountIDIn) {
+    private static String[] findRow(Integer customerIDIn, String firstNameIn, String lastNameIn, Integer accountIDIn) {
         try (BufferedReader reader = new BufferedReader(new FileReader("BankUsers.csv"))) {
             String line = reader.readLine(); // Reads and skips header row
             while ((line = reader.readLine()) != null) {
@@ -456,7 +427,7 @@ public class UserInteractions {
      * @param functionName: Dynamic menu based on what function is wanting to be used
      * @return index where account is found in account array.
      */
-    public static int printChooseAccount(String functionName){
+    private static int printChooseAccount(String functionName){
         System.out.println("--------------------------------------------------------------\n" +
                            "Which account would you like to " + functionName + " in?\n" +
                            "--------------------------------------------------------------\n" +
