@@ -1,10 +1,12 @@
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
+
 /**
  * Concrete class representation of a savings account in a bank.
  * 
- * Provides implementation for the abstract methods such as collecting amount from user,
+ * Provides implementation for the abstract methods such as collecting amount
+ * from user,
  * deposit function, withdraw function, and money transferring.
  * 
  * @author Blaine
@@ -15,7 +17,7 @@ public class Savings extends Account {
     // Use a single Scanner instance for user input throughout the class.
     private static final Scanner scanner = new Scanner(System.in);
 
-    public Savings(int accountIDIn, double balanceIn){
+    public Savings(int accountIDIn, double balanceIn) {
         super(accountIDIn, balanceIn);
     }
 
@@ -35,7 +37,7 @@ public class Savings extends Account {
             if (scanner.hasNextDouble()) {
                 amount = scanner.nextDouble();
                 scanner.nextLine();
-                
+
                 // Check if input is positive
                 if (amount >= 0) {
                     break;
@@ -62,20 +64,26 @@ public class Savings extends Account {
         logTransaction(transactionDetails);
     }
 
-    /** 
+    /**
      * Removes amount inputed to balance.
      * The amount of withdrawals are limited per cycle.
      */
     @Override
     public void withdraw() {
-        if (this.withdrawLimit <= 0){
+        if (this.withdrawLimit <= 0) {
             System.out.println("Process Denied: Cannot proceed monthly transaction limit.");
         }
+        // changed this for transaction log
+        double amount = amountWithinBalance();
 
-        this.setBalance(this.getBalance() - amountWithinBalance());
+        this.setBalance(this.getBalance() - amount);
         this.withdrawLimit -= 1;
 
         System.out.println("Process Success: Current Balance = " + this.getBalance());
+        // Log the withdrawal transaction
+        String transactionDetails = "Withdrew $" + amount + " from account ID: " + this.getAccountID();
+        logTransaction(transactionDetails);
+
     }
 
     /** Transfers money from account to recipient's account. */
@@ -88,10 +96,15 @@ public class Savings extends Account {
         this.withdrawLimit -= 1;
 
         System.out.println("Process Success: Current Balance = " + this.getBalance());
+
+        // Log the transfer transaction
+        String transactionDetails = "Transferred $" + amount + " from account ID: " + this.getAccountID() +
+                " to account ID: " + recipient.getAccountID();
+        logTransaction(transactionDetails);
     }
 
     /** Collects a positive double within the account's balance. */
-    private double amountWithinBalance () {
+    private double amountWithinBalance() {
         double amount;
 
         // Loop to ensure that amount is not greater than balance

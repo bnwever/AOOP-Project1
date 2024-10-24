@@ -5,7 +5,8 @@ import java.io.IOException;
 /**
  * Concrete class representation of a savings account in a bank.
  * 
- * Provides implementation for the abstract methods such as collecting amount from user,
+ * Provides implementation for the abstract methods such as collecting amount
+ * from user,
  * deposit function, withdraw function, and money transferring.
  * 
  * @author Blaine
@@ -16,7 +17,7 @@ public class Credit extends Account {
     // Use a single Scanner instance for user input throughout the class.
     private static final Scanner scanner = new Scanner(System.in);
 
-    public Credit(int accountIDIn, double creditMaxIn, double balanceIn){
+    public Credit(int accountIDIn, double creditMaxIn, double balanceIn) {
         super(accountIDIn, balanceIn);
         this.creditLimit = -creditMaxIn;
     }
@@ -36,7 +37,7 @@ public class Credit extends Account {
             // Check if input is double
             if (scanner.hasNextDouble()) {
                 amount = scanner.nextDouble();
-                
+
                 // Check if input is positive
                 if (amount >= 0) {
                     break;
@@ -68,13 +69,21 @@ public class Credit extends Account {
 
         this.setBalance(this.getBalance() + amount);
         System.out.println("Process Success: Current Balance = $" + this.getBalance());
+
+        String transactionDetails = "Deposited $" + amount + " into account ID: " + this.getAccountID();
+        logTransaction(transactionDetails);
     }
 
     /** Removes amount inputed to balance. */
     @Override
     public void withdraw() {
-        this.setBalance(this.getBalance() - amountWithinBalance());
+        double amount = amountWithinBalance();
+
+        this.setBalance(this.getBalance() - amount);
         System.out.println("Process Success: Current Balance = " + this.getBalance());
+        // Log the withdrawal transaction
+        String transactionDetails = "Withdrew $" + amount + " from account ID: " + this.getAccountID();
+        logTransaction(transactionDetails);
     }
 
     /** Transfers money from account to recipient's account. */
@@ -86,10 +95,15 @@ public class Credit extends Account {
         recipient.setBalance(recipient.getBalance() + amount);
 
         System.out.println("Process Success: Current Balance = " + this.getBalance());
+
+        // Log the transfer transaction
+        String transactionDetails = "Transferred $" + amount + " from account ID: " + this.getAccountID() +
+                " to account ID: " + recipient.getAccountID();
+        logTransaction(transactionDetails);
     }
 
     /** Collects a positive double within the account's balance. */
-    private double amountWithinBalance () {
+    private double amountWithinBalance() {
         double amount;
 
         // Loop to ensure that amount is not greater than balance
@@ -103,8 +117,9 @@ public class Credit extends Account {
             }
         }
 
-        return amount;   
+        return amount;
     }
+
     /** logs the transaction details into TransactionLog.txt */
     private void logTransaction(String transactionDetails) {
         try (FileWriter writer = new FileWriter("TransactionLog.txt", true)) {
@@ -112,5 +127,5 @@ public class Credit extends Account {
         } catch (IOException e) {
             System.out.println("log error");
         }
-    }   
+    }
 }

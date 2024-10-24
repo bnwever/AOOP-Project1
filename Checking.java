@@ -5,7 +5,8 @@ import java.io.IOException;
 /**
  * Concrete class representation of a checking account in a bank.
  * 
- * Provides implementation for the abstract methods such as collecting amount from user,
+ * Provides implementation for the abstract methods such as collecting amount
+ * from user,
  * deposit function, withdraw function, and money transferring.
  * 
  * @author Blaine
@@ -13,7 +14,7 @@ import java.io.IOException;
 public class Checking extends Account {
     /** Fee for overdrafting balance */
     private double overDraftFee = 50.0;
-    
+
     // Use a single Scanner instance for user input throughout the class.
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -36,7 +37,7 @@ public class Checking extends Account {
             // Check if input is double
             if (scanner.hasNextDouble()) {
                 amount = scanner.nextDouble();
-                
+
                 // Check if input is positive
                 if (amount >= 0) {
                     break;
@@ -57,13 +58,13 @@ public class Checking extends Account {
         double amount = collectAmount();
         this.setBalance(this.getBalance() + amount);
         System.out.println("Process Success: Current Balance = " + this.getBalance());
-        
+
         String transactionDetails = "Deposited $" + amount + " into account ID: " + this.getAccountID();
         logTransaction(transactionDetails);
     }
 
     /**
-     * Removes amount inputted from balance. 
+     * Removes amount inputted from balance.
      * Applies an overdraft fee if balance after withdrawal is below 0.
      */
     @Override
@@ -80,6 +81,11 @@ public class Checking extends Account {
             }
 
             System.out.println("Process Success: Current Balance = " + this.getBalance());
+
+            // Log the withdrawal transaction
+            String transactionDetails = "Withdrew $" + amount + " from account ID: " + this.getAccountID();
+            logTransaction(transactionDetails);
+
         } else {
             System.out.println("Insufficient funds, including overdraft consideration.");
         }
@@ -94,6 +100,11 @@ public class Checking extends Account {
         recipient.setBalance(recipient.getBalance() + amount);
 
         System.out.println("Process Success: Current Balance = " + this.getBalance());
+
+        // Log the transfer transaction
+        String transactionDetails = "Transferred $" + amount + " from account ID: " + this.getAccountID() +
+                " to account ID: " + recipient.getAccountID();
+        logTransaction(transactionDetails);
     }
 
     /** Collects a positive double within the account's balance. */
@@ -113,7 +124,7 @@ public class Checking extends Account {
 
         return amount;
     }
-    
+
     /** logs the transaction details into TransactionLog.txt */
     private void logTransaction(String transactionDetails) {
         try (FileWriter writer = new FileWriter("TransactionLog.txt", true)) {
